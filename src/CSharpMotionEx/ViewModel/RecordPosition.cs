@@ -10,8 +10,9 @@ namespace ViewModel
 {
     class RecordPosition
     {
-        private List<double> m_PositionList = new List<double>();
+        private List<double> m_PositionList;
         private Motor m;
+        private cliValueDouble m_initial_position;
         public RecordPosition(Motor motor)
         {
             List<string> Info = new List<string>();
@@ -30,19 +31,17 @@ namespace ViewModel
                 { 
                     case "Record":
                         RecordPositions();
-                    break;
-
-
+                        break;
                     case "Play":
                         Play();
-                    break;
+                        break;
                 }
             }
 
         }
         public void Play()
         {
-            m.Unlock();
+            //m.SetPositon(m_initial_position, true);
             foreach (var item in m_PositionList)
             {
                 m.SetVelocity(item);
@@ -51,7 +50,14 @@ namespace ViewModel
 
         public void RecordPositions()
         {
+            Console.WriteLine("Please set the initial position of the motor. Then press any key to record.");
             m.Unlock();
+            while (!Console.KeyAvailable)
+            {
+            }
+            m_initial_position = m.ActualPosition;
+            m_PositionList = new List<double>();
+            Console.WriteLine("Recording motion... Press any key to stop recording.");
             while (!Console.KeyAvailable)
             {
                 m.RefreshInfo(10);
