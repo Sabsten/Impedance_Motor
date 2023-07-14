@@ -15,7 +15,9 @@ namespace ViewModel
                 Interface MenuPrincipal = new Interface();
                 MenuPrincipal.ModMenu();
                 MenuPrincipal.ModeSelection();
+                Console.Clear();
                 MenuPrincipal.MotorSelection();
+                Console.Clear();
                 List<Motor> MotorList = MenuPrincipal.motors;
                 if (MotorList.Count != 0)
                 {
@@ -45,10 +47,8 @@ namespace ViewModel
                 }
                 else
                 {
-                    Console.WriteLine("No motor");
-                    while (!Console.KeyAvailable)
-                    {
-                    }
+                    Console.WriteLine("No motor available..");
+                    Console.ReadKey();
                 }
             };
         }
