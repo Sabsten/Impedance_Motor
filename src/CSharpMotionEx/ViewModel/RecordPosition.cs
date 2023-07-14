@@ -4,9 +4,9 @@ using Model;
 
 namespace ViewModel
 {
-    class PositionReturn
+    class RecordPosition
     {
-        public PositionReturn(Motor m)
+        public RecordPosition(Motor m)
         {
             double previousTorque = 0;
             while (!Console.KeyAvailable)
@@ -17,7 +17,7 @@ namespace ViewModel
 
                 if (m.TorqueAverage != 0 && m.VelocityAverage != 0)
                 {
-                    if (previousTorque-m.TorqueAverage >= 0.13)
+                    if (previousTorque - m.TorqueAverage >= 0.13)
                     {
                         m.SetVelocity(m.AccelerationModel());
                     }
@@ -28,7 +28,7 @@ namespace ViewModel
                     previousTorque = m.TorqueAverage;
                 }
 
-                
+
                 m.Wait(1);
             }
 

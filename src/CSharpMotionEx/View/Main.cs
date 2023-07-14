@@ -33,15 +33,23 @@ namespace ViewModel
                             break;
                         case "3":
                             Console.WriteLine("");
-                            _ = new PositionReturn(MotorList[0]);
+                            _ = new Acceleration(MotorList[0]);
                             break;
                         case "4":
                             Console.WriteLine("");
-                            _ = new PositionReturn(MotorList[0]);
+                            _ = new RecordPosition(MotorList[0]);
                             break;
                         case "5":
                             Console.WriteLine("");
                             _ = new PositionReturn(MotorList[0]);
+                            break;
+                        case "6":
+                            Console.WriteLine("");
+                            _ = new FlipFlap(MotorList[0], MotorList[0]);
+                            break;
+                        case "7":
+                            Console.WriteLine("");
+                            _ = new Crips(MotorList[0]);
                             break;
                     }
                 }
