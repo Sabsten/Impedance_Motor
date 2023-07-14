@@ -1,0 +1,46 @@
+{
+  "Mods": [
+    {
+      "Number": 1,
+      "Name": "Egg Mode",
+      "Explaination": "In this mode, the motor will rotate and cease operation if it encounters an obstruction. The intent is to place an egg so that the motor stops when it touches the egg without cracking it.",
+      "Motor_required": 1
+    },
+    {
+      "Number": 2,
+      "Name": "Mirror Mode",
+      "Explaination": "If an object obstructs the motor, it will reverse its rotation.",
+      "Motor_required": 1
+    },
+    {
+      "Number": 3,
+      "Name": "Acceleration Mode",
+      "Explaination": "If an external force pushes the motor, it will continuously accelerate. Conversely, it will decelerate if there's no contact.",
+      "Motor_required": 1
+    },
+    {
+      "Number": 4,
+      "Name": "Record Positions mode",
+      "Explaination": "This feature allows users to record a particular movement. The motor will then replicate that motion.",
+      "Motor_required": 1
+    },
+    {
+      "Number": 5,
+      "Name": "Position Return Mode",
+      "Explaination": "The motor will revert to its default position.",
+      "Motor_required": 1
+    },
+    {
+      "Number": 6,
+      "Name": "Flip Flap Mode",
+      "Explaination": "This mode requires two motors. One motor rotates until it comes into contact with the other, at which point it stops and activates the second motor. The second motor then does the same, stopping upon contact and activating the first motor.",
+      "Motor_required": 2
+    },
+    {
+      "Number": 7,
+      "Name": "Crips Mode",
+      "Explaination": "In this mode, the motor remains stationary until external force is applied. The objective is to push the motor with a crisp without breaking it.",
+      "Motor_required": 1
+    }
+  ]
+}
