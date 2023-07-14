@@ -1,48 +1,64 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using sFndCLIWrapper;
 using Model;
+using Spectre.Console;
+using System.Windows.Documents;
 
 namespace ViewModel
 {
     class RecordPosition
     {
-        public RecordPosition(Motor m)
+        private List<double> m_PositionList = new List<double>();
+        private Motor m;
+        public RecordPosition(Motor motor)
         {
-            double previousTorque = 0;
-            while (!Console.KeyAvailable)
+            List<string> Info = new List<string>();
+            Info.Add("1 - Play");
+            Info.Add("1 - Record");
+            m = motor;
+            while (true)
             {
-                m.RefreshInfo(30);
-                Console.WriteLine("Average Velocity : " + m.VelocityAverage);
-                Console.WriteLine("Average Torque : " + m.TorqueAverage);
+                string choice = AnsiConsole.Prompt(
+                    new SelectionPrompt<string>()
+                        .Title("Select [red]record[/] or [green]Play[/] a motion.")
+                        .PageSize(10)
+                        .MoreChoicesText("[grey](Move up and down to reveal more frameworks)[/]")
+                        .AddChoices(Info));
+                switch (choice.Split(" - ".ToCharArray())[1])
+                { 
+                    case "Record":
+                        RecordPositions();
+                    break;
 
-                if (m.TorqueAverage != 0 && m.VelocityAverage != 0)
-                {
-                    if (previousTorque - m.TorqueAverage >= 0.13)
-                    {
-                        m.SetVelocity(m.AccelerationModel());
-                    }
-                    else
-                    {
-                        m.SetVelocity(m.DecelerationModel());
-                    }
-                    previousTorque = m.TorqueAverage;
+
+                    case "Play":
+                        Play();
+                    break;
                 }
-
-
-                m.Wait(1);
             }
 
-            m.Lock(1000, cliNodeStopCodes.STOP_TYPE_DISABLE_RAMP);
-            m.WaitUntilMoveDone(500);
-            Console.ReadKey(true);
-            ErrorAndQuit("Fin program");
+        }
+        public void Play()
+        {
+            m.Unlock();
+            foreach (var item in m_PositionList)
+            {
+                m.SetVelocity(item);
+            }
         }
 
-        public static void ErrorAndQuit(string message)
+        public void RecordPositions()
         {
-            Console.WriteLine(message);
-            Console.ReadLine();
-            Environment.Exit(1);
+            m.Unlock();
+            while (!Console.KeyAvailable)
+            {
+                m.RefreshInfo(10);
+                m_PositionList.Add(m.VelocityAverage);
+                //Console.WriteLine("Average Velocity : " + m.VelocityAverage);
+                //Console.WriteLine("Average Torque : " + m.TorqueAverage);
+            }
         }
     }
 }
