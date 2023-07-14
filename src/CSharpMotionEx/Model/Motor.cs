@@ -24,6 +24,8 @@ namespace Model
 
         private Node m_Node;
 
+        public cliValueDouble ActualPosition { get { return m_positionValue; } }
+
         private int m_NodePort;
         public int NodePort { get { return m_NodePort; } }
         private bool m_IsLocked;
@@ -122,7 +124,10 @@ namespace Model
             m_IsDecelerate = false;
             return m_constantes.ACCERATION_MODEL_VMAX / (1 + Math.Exp(m_constantes.ACCELERATION_MODEL_SLOPE * (m_constantes.ACCELERATION_MODEL_TORQUE_SENSITIVITY * TorqueAverage * VelocityAverage - m_constantes.ACCELERATION_MODEL_TOQUE_FLEXION_POINT)));
         }
-
+        public void SetPositon(int target, bool absolute)
+        {
+            m_Node.NodeObject.Motion.MovePosnStart(target, absolute, false);
+        }
         public double DecelerationModel()
         {
             m_IsDecelerate = true;
