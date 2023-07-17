@@ -17,7 +17,7 @@ namespace ViewModel
         {
             List<string> Info = new List<string>();
             Info.Add("1 - Play");
-            Info.Add("1 - Record");
+            Info.Add("2 - Record");
             m = motor;
             while (true)
             {
@@ -27,12 +27,13 @@ namespace ViewModel
                         .PageSize(10)
                         .MoreChoicesText("[grey](Move up and down to reveal more frameworks)[/]")
                         .AddChoices(Info));
-                switch (choice.Split(" - ".ToCharArray())[1])
+                Console.Clear();
+                switch (choice.Split(" - ".ToCharArray())[0])
                 { 
-                    case "Record":
+                    case "1":
                         RecordPositions();
                         break;
-                    case "Play":
+                    case "2":
                         Play();
                         break;
                 }
@@ -58,7 +59,7 @@ namespace ViewModel
             m_initial_position = m.ActualPosition;
             m_PositionList = new List<double>();
             Console.WriteLine("Recording motion... Press any key to stop recording.");
-            while (!Console.KeyAvailable)
+            while (Console.KeyAvailable)
             {
                 m.RefreshInfo(10);
                 m_PositionList.Add(m.VelocityAverage);

@@ -30,7 +30,6 @@ namespace ViewModel
                     }
                     previousTorque = m.TorqueAverage;
                 }
-                RefreshDrawing(m);
 
                 m.Wait(1);
             }
