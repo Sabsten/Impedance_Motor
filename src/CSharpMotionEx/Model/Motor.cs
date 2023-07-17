@@ -83,6 +83,7 @@ namespace Model
             m_IsLocked = false;
         }
 
+        public event Action MotorPositionRefreshed;
         public void RefreshInfo(int itteration)
         {
             m_torquesList.Clear();
@@ -98,6 +99,15 @@ namespace Model
                 m_velocitiesList.Add(m_velocityValue.Value());
                 m_positionsList.Add(m_positionValue.Value());
             }
+
+            // Trigger the event after the motor position is refreshed.
+            MotorPositionRefreshed?.Invoke();
+
+        }
+
+        public double Position
+        {
+            get { return m_positionValue.Value(); }
         }
 
         public void GoHome()
