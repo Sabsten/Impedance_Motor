@@ -90,6 +90,10 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CLRWrapper, Version=1.0.8598.18810, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CLRWrapper\x64\Debug\CLRWrapper.dll</HintPath>
+    </Reference>
     <Reference Include="EPPlus, Version=6.2.6.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <HintPath>..\packages\EPPlus.6.2.6\lib\net462\EPPlus.dll</HintPath>
     </Reference>
@@ -187,12 +191,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CLRWrapper\CLRWrapper.vcxproj">
-      <Project>{525724d7-5bf1-4990-977a-22d82da47135}</Project>
-      <Name>CLRWrapper</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
