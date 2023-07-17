@@ -31,10 +31,11 @@ namespace ViewModel
                 switch (choice.Split(" - ".ToCharArray())[0])
                 { 
                     case "1":
-                        RecordPositions();
+                        Play();
+                        
                         break;
                     case "2":
-                        Play();
+                        RecordPositions();
                         break;
                 }
             }
@@ -51,15 +52,15 @@ namespace ViewModel
 
         public void RecordPositions()
         {
-            Console.WriteLine("Please set the initial position of the motor. Then press any key to record.");
             m.Unlock();
+            Console.WriteLine("Please set the initial position of the motor. Then press any key to record.");
             while (!Console.KeyAvailable)
             {
             }
             m_initial_position = m.ActualPosition;
             m_PositionList = new List<double>();
             Console.WriteLine("Recording motion... Press any key to stop recording.");
-            while (Console.KeyAvailable)
+            while (!Console.KeyAvailable)
             {
                 m.RefreshInfo(10);
                 m_PositionList.Add(m.VelocityAverage);
