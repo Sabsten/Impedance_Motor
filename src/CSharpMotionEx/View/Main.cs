@@ -36,11 +36,13 @@ namespace ViewModel
                             break;
                         case "4":
                             Console.WriteLine("");
-                            _ = new PositionReturn(MotorList[0]);
+                            _ = new RecordPosition(MotorList[0]);
+                            
                             break;
                         case "5":
                             Console.WriteLine("");
                             _ = new PositionReturn(MotorList[0]);
+
                             break;
                         case "6":
                             Console.WriteLine("");

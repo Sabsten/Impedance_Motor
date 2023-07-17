@@ -30,26 +30,37 @@ namespace Model
 
         private List<Motor> m_PortList;
         public List<Motor> PortList { get { return m_PortList; } }
-        private int Counter = 0;
+        private int portCount;
         public void SetProgramName(string ProgramName)
         {
             m_ProgramName = ProgramName;
         }
         public MotorManager()
         {
+            myMgr = new cliSysMgr();
             m_NodeCount = 4;
             OpenPorts();
             m_motorList = new List<Motor>();
             m_NodeList = new List<Node>();
             Constantes c = new Constantes();
-            myMgr.PortsOpen(m_NodeCount);
-            for (int i = 0; i < Counter; i++)
+            cliIPort myPort = myMgr.Ports(portCount);
+            if (portCount < 1)
             {
-                cliIPort myPort = myMgr.Ports(i);
-                myNodes = new cliINode[myPort.NodeCount()];
-                //Console.WriteLine("Port {" + myPort.NetNumber() + "}: state={" + myPort.OpenState() + "}, nodes={" + myPort.NodeCount() + "}");
-                for (int n = 0; n < myNodes.Count(); n++)
-                {
+                Console.WriteLine("Unable to locate SC hub port.");
+            }
+
+            myMgr.PortsOpen(portCount);
+            for (int i = 0; i < portCount; i++)
+            {
+                // Create a reference to our current port and an array of references to the port's nodes
+                myPort = myMgr.Ports(i);
+                cliINode[] myNodes = new cliINode[myPort.NodeCount()];
+                Console.WriteLine("Port {0}: state={1}, nodes={2}", myPort.NetNumber(), myPort.OpenState(), myPort.NodeCount());
+
+                // Once the code gets past this point, it can be assumed that the Port has been opened without issue
+                // Now we can get a reference to our port object which we will use to access the node objects
+                for (int n = 0; n < myPort.NodeCount(); n++)
+                { 
                     NodeStarndartTraiement(myPort.Nodes(n), c);
                     Node NodePack = new Node();
                     NodePack.LearnNode(myPort.Nodes(n), n);
@@ -90,24 +101,21 @@ namespace Model
 
         private void OpenPorts()
         {
+            cliSysMgr myMgr = new cliSysMgr();
             List<String> comHubPorts = new List<String>();
-            // Create the SysManager object. This object will coordinate actions among various ports
-            // and within nodes. In this example we use this object to setup and open our port.
-            myMgr = new cliSysMgr();
+
             // This will try to open the port. If there is an error/exception during the port opening,
             // the code will jump to the catch loop where detailed information regarding the error will be displayed;
             // otherwise the catch loop is skipped over
             myMgr.FindComHubPorts(comHubPorts);
-            for (int i = 0; i < m_NodeCount; i++)
+            portCount = comHubPorts.Count;
+
+            Console.WriteLine("Found {0} SC Hubs.", comHubPorts.Count);
+
+            for (int i = 0; i < portCount && portCount < 3; i++)
             {
-                try
-                {
-                    myMgr.ComPortHub((uint)i, comHubPorts[i], cliSysMgr._netRates.MN_BAUD_12X);
-                    Counter++;
-                }
-                catch (Exception e)
-                {
-                }
+                myMgr.ComPortHub((uint)i, comHubPorts[i], cliSysMgr._netRates.MN_BAUD_12X);
+
             }
         }
 
