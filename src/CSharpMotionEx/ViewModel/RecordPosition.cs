@@ -18,27 +18,32 @@ namespace ViewModel
             List<string> Info = new List<string>();
             Info.Add("1 - Play");
             Info.Add("2 - Record");
-            m = motor;
             while (true)
             {
-                string choice = AnsiConsole.Prompt(
-                    new SelectionPrompt<string>()
-                        .Title("Select [red]record[/] or [green]Play[/] a motion.")
-                        .PageSize(10)
-                        .MoreChoicesText("[grey](Move up and down to reveal more frameworks)[/]")
-                        .AddChoices(Info));
-                Console.Clear();
-                switch (choice.Split(" - ".ToCharArray())[0])
-                { 
-                    case "1":
-                        Play();
-                        
-                        break;
-                    case "2":
-                        RecordPositions();
-                        break;
+
+                m = motor;
+                while (true)
+                {
+                    string choice = AnsiConsole.Prompt(
+                        new SelectionPrompt<string>()
+                            .Title("Select [red]record[/] or [green]Play[/] a motion.")
+                            .PageSize(10)
+                            .MoreChoicesText("[grey](Move up and down to reveal more frameworks)[/]")
+                            .AddChoices(Info));
+                    Console.Clear();
+                    switch (choice.Split(" - ".ToCharArray())[0])
+                    {
+                        case "1":
+                            Play();
+
+                            break;
+                        case "2":
+                            RecordPositions();
+                            break;
+                    }
                 }
             }
+            
 
         }
         public void Play()
@@ -47,6 +52,7 @@ namespace ViewModel
             foreach (var item in m_PositionList)
             {
                 m.SetVelocity(item);
+                m.Wait(100);
             }
         }
 
@@ -54,9 +60,7 @@ namespace ViewModel
         {
             m.Unlock();
             Console.WriteLine("Please set the initial position of the motor. Then press any key to record.");
-            while (!Console.KeyAvailable)
-            {
-            }
+            Console.ReadKey();
             m_initial_position = m.ActualPosition;
             m_PositionList = new List<double>();
             Console.WriteLine("Recording motion... Press any key to stop recording.");
@@ -67,6 +71,7 @@ namespace ViewModel
                 //Console.WriteLine("Average Velocity : " + m.VelocityAverage);
                 //Console.WriteLine("Average Torque : " + m.TorqueAverage);
             }
+            m.Lock(10, cliNodeStopCodes.STOP_TYPE_ABRUPT);
         }
     }
 }

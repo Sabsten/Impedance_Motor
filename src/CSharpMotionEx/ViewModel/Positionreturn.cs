@@ -28,8 +28,6 @@ namespace ViewModel
                     previousTorque = m.TorqueAverage;
                 }
 
-
-                m.Wait(1);
             }
 
             m.Lock(1000, cliNodeStopCodes.STOP_TYPE_DISABLE_RAMP);
