@@ -82,6 +82,7 @@ namespace Model
 
         public void Unlock()
         {
+            m_Node.NodeObject.EnableReq(false);
             m_IsLocked = false;
         }
 

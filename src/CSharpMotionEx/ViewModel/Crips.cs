@@ -27,8 +27,6 @@ namespace ViewModel
                     }
                     previousTorque = m.TorqueAverage;
                 }
-
-
                 m.Wait(1);
             }
 
