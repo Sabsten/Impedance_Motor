@@ -85,6 +85,10 @@ namespace Model
             m_IsLocked = false;
         }
 
+        public void RecordFalse() { m_Node.NodeObject.EnableReq(false); }
+
+        public void RecordTrue() { m_Node.NodeObject.EnableReq(true); }
+
         public void RefreshInfo(int itteration)
         {
             m_torquesList.Clear();
