@@ -11,6 +11,7 @@ namespace ViewModel
     class RecordPosition
     {
         private List<double> m_PositionList;
+        private List<double> m_PositionList2;
         private Motor m;
         private cliValueDouble m_initial_position;
         public RecordPosition(Motor motor)
@@ -50,13 +51,28 @@ namespace ViewModel
         }
         public void Play()
         {
+            m.Lock(10);
+            
             //m.SetPositon(m_initial_position, true);
             foreach (var item in m_PositionList)
             {
-                m.SetVelocity(item);
+                if (item == 0)
+                {
+                    m.Lock(1, cliNodeStopCodes.STOP_TYPE_ABRUPT) ;
+                    m.Unlock();
+
+                }
+                else
+                {
+                    m.SetVelocity(item); 
+                }
                 m.Wait(100);
+
             }
+            
+           // m.Lock(10, cliNodeStopCodes.STOP_TYPE_ABRUPT);
         }
+
 
         public void RecordPositions()
         {
@@ -68,8 +84,10 @@ namespace ViewModel
             Console.WriteLine("Recording motion... Press any key to stop recording.");
             while (!Console.KeyAvailable)
             {
+                m.Wait(500);
                 m.RefreshInfo(10);
                 m_PositionList.Add(m.VelocityAverage);
+                //m_PositionList2.Add(m.PositionAverage);
                 //Console.WriteLine("Average Velocity : " + m.VelocityAverage);
                 //Console.WriteLine("Average Torque : " + m.TorqueAverage);
             }

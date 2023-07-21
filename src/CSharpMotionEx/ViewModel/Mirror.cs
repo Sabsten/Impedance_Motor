@@ -11,7 +11,7 @@ namespace ViewModel
         public Miror(Motor m)
         {
             double VelocityIndex = 50;
-            double TorqueLimit = 0.13;
+            double TorqueLimit = 0.15;
             long now = DateTimeOffset.Now.ToUnixTimeSeconds();
             while (!Console.KeyAvailable)
             {

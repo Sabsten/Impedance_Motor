@@ -139,5 +139,13 @@ namespace Model
             double decel = -m_constantes.DECELERATION_MODEL_SLOPE * ((Math.Pow(VelocityAverage - m_constantes.DECELERATION_MODEL_SHIFT, 2)) / (m_constantes.DECELERATION_MODEL_WIDTH)) + m_constantes.DECELERATION_MODEL_VMAX - TorqueAverage * m_constantes.DECELERATION_MODEL_DAMPING_COEFFICIENT;
             return decel < 0 ? 0 : (decel > 80 ? 80 : decel);
         }
+        public bool Changeway(double vite)
+        {
+            if (vite<0 ) 
+            {
+                return true; }
+            else 
+                { return false; }
+        }
     }
 }
