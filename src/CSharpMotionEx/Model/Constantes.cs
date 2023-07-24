@@ -40,6 +40,8 @@ namespace ViewModel
         public double EGG_VELOCITY { get { return m_EGG_VELOCITY; } }
         private double m_EGG_TORQUE_SENSITIVITY;
         public double EGG_TORQUE_SENSITIVITY { get { return m_EGG_TORQUE_SENSITIVITY; } }
+        private Dictionary<string,string> m_GetConstantsList;
+        public Dictionary<string, string> GetConstantsList  { get { return m_GetConstantsList; } }
 
         string cgfPath;
 
@@ -65,6 +67,7 @@ namespace ViewModel
                         }
                     }
                 }
+                m_GetConstantsList = DataDictionary;
             }
             catch (Exception ex)
             {
@@ -106,16 +109,17 @@ namespace ViewModel
             return directoryInfo.FullName + "\\" + cfgFileName;
         }
 
+
+
         public void WriteConstant(string key, string value)
         {
             try
             {
 
                 string path = GetDirectory("config.cfg");
-                File.WriteAllText(path, string.Empty);
                 if (!File.Exists(path))
                 {
-                    Console.WriteLine("Le fichier de configuration n'existe pas.");
+                    Console.WriteLine("File do not exists.");
                     return;
                 }
 
@@ -141,7 +145,7 @@ namespace ViewModel
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Une erreur s'est produite lors de l'écriture dans le fichier de configuration : " + ex.Message);
+                Console.WriteLine("ERROR : " + ex.Message);
             }
         }
 
