@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Model;
 namespace ViewModel
 {
@@ -104,5 +105,46 @@ namespace ViewModel
 
             return directoryInfo.FullName + "\\" + cfgFileName;
         }
+
+        public void WriteConstant(string key, string value)
+        {
+            try
+            {
+
+                string path = GetDirectory("config.cfg");
+                File.WriteAllText(path, string.Empty);
+                if (!File.Exists(path))
+                {
+                    Console.WriteLine("Le fichier de configuration n'existe pas.");
+                    return;
+                }
+
+                // Lire toutes les lignes du fichier
+                var lines = File.ReadAllLines(path).ToList();
+
+                // Chercher la clé dans le fichier
+                int index = lines.FindIndex(line => line.StartsWith(key + "="));
+
+                // Si la clé existe déjà, mettre à jour la valeur
+                if (index != -1)
+                {
+                    lines[index] = key + "=" + value;
+                }
+                // Sinon, ajouter une nouvelle ligne avec la clé et la valeur
+                else
+                {
+                    lines.Add(key + "=" + value);
+                }
+
+                // Écrire les lignes dans le fichier
+                File.WriteAllLines(path, lines);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Une erreur s'est produite lors de l'écriture dans le fichier de configuration : " + ex.Message);
+            }
+        }
+
+
     }
 }

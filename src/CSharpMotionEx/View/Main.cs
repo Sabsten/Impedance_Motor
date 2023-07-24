@@ -52,6 +52,10 @@ namespace ViewModel
                             Console.WriteLine("");
                             _ = new Crips(MotorList[0]);
                             break;
+                        case "8":
+                            Console.WriteLine("");
+                            _ = new Option();
+                            break;
                     }
                 }
                 else
