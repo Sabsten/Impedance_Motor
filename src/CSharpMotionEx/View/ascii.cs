@@ -7,7 +7,7 @@ class Program
     static int centerX = 8;
     static int centerY = 8;
 
-    public static void Main()
+    public static void a()
     {
         for (int i = 0; i < 17; i++)
         {

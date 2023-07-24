@@ -96,13 +96,6 @@ namespace ViewModel
                         .AddChoices(list));
             }
             m_motors = MManager.MotorList;
-
-
-            // Subscribe to the MotorPositionRefreshed event for each motor.
-            foreach (Motor motor in m_motors)
-            {
-                motor.MotorPositionRefreshed += () => DisplayMotorPosition(motor);
-            }
         }
         string GetModsDirectory(string cfgFileName = "statham.json")
         {
@@ -141,18 +134,7 @@ namespace ViewModel
             public List<Mod> Mods { get; set; }
         }
 
-        private void DisplayMotorPosition(Motor motor)
-        {
-            int motorPosition = (int)Math.Round(motor.Position); // Get the position of the motor and round it to the nearest integer
-            string motorArm = new string('-', motorPosition) + "*" + new string('-', (50 - motorPosition)); // Create the ASCII representation of the motor arm
 
-            AnsiConsole.Clear(); // Clear the console
-            AnsiConsole.Write(
-                new Panel(motorArm) // Display the motor arm
-                    .Expand()
-                    .BorderColor(Color.Red)
-                    .Header("[[ [bold underline blue on white]Motor position[/] ]]"));
-        }
 
     }
 }
