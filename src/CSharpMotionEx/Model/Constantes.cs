@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Model;
 namespace ViewModel
 {
@@ -39,6 +40,8 @@ namespace ViewModel
         public double EGG_VELOCITY { get { return m_EGG_VELOCITY; } }
         private double m_EGG_TORQUE_SENSITIVITY;
         public double EGG_TORQUE_SENSITIVITY { get { return m_EGG_TORQUE_SENSITIVITY; } }
+        private Dictionary<string,string> m_GetConstantsList;
+        public Dictionary<string, string> GetConstantsList  { get { return m_GetConstantsList; } }
 
         string cgfPath;
 
@@ -64,6 +67,7 @@ namespace ViewModel
                         }
                     }
                 }
+                m_GetConstantsList = DataDictionary;
             }
             catch (Exception ex)
             {
@@ -104,5 +108,47 @@ namespace ViewModel
 
             return directoryInfo.FullName + "\\" + cfgFileName;
         }
+
+
+
+        public void WriteConstant(string key, string value)
+        {
+            try
+            {
+
+                string path = GetDirectory("config.cfg");
+                if (!File.Exists(path))
+                {
+                    Console.WriteLine("File do not exists.");
+                    return;
+                }
+
+                // Lire toutes les lignes du fichier
+                var lines = File.ReadAllLines(path).ToList();
+
+                // Chercher la clé dans le fichier
+                int index = lines.FindIndex(line => line.StartsWith(key + "="));
+
+                // Si la clé existe déjà, mettre à jour la valeur
+                if (index != -1)
+                {
+                    lines[index] = key + "=" + value;
+                }
+                // Sinon, ajouter une nouvelle ligne avec la clé et la valeur
+                else
+                {
+                    lines.Add(key + "=" + value);
+                }
+
+                // Écrire les lignes dans le fichier
+                File.WriteAllLines(path, lines);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR : " + ex.Message);
+            }
+        }
+
+
     }
 }

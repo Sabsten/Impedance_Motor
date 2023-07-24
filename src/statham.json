@@ -41,6 +41,12 @@
       "Name": "Crips Mode",
       "Explaination": "In this mode, the motor remains stationary until external force is applied. The objective is to push the motor with a crisp without breaking it.",
       "Motor_required": 1
+    },
+    {
+      "Number": 8,
+      "Name": "Option",
+      "Explaination": "Option and configurationMode",
+      "Motor_required": 0
     }
   ]
 }
