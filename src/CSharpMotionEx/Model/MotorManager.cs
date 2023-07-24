@@ -55,7 +55,7 @@ namespace Model
                 // Create a reference to our current port and an array of references to the port's nodes
                 myPort = myMgr.Ports(i);
                 cliINode[] myNodes = new cliINode[myPort.NodeCount()];
-                Console.WriteLine("Port {0}: state={1}, nodes={2}", myPort.NetNumber(), myPort.OpenState(), myPort.NodeCount());
+                Console.WriteLine("Port {"+ myPort.NetNumber() + "}: state={"+ myPort.OpenState()+ "}, nodes={"+myPort.NodeCount()+"}");
 
                 // Once the code gets past this point, it can be assumed that the Port has been opened without issue
                 // Now we can get a reference to our port object which we will use to access the node objects
@@ -115,7 +115,6 @@ namespace Model
             for (int i = 0; i < portCount && portCount < 3; i++)
             {
                 myMgr.ComPortHub((uint)i, comHubPorts[i], cliSysMgr._netRates.MN_BAUD_12X);
-
             }
         }
 

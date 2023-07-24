@@ -49,7 +49,6 @@ namespace ViewModel
         {
             Console.WriteLine(message);
             Console.ReadLine();
-            Environment.Exit(1);
         }
     }
 }

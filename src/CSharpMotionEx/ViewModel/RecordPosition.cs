@@ -43,8 +43,6 @@ namespace ViewModel
                     }
                 }
             }
-            
-
         }
         public void Play()
         {
@@ -54,10 +52,13 @@ namespace ViewModel
                 m.SetVelocity(item);
                 m.Wait(100);
             }
+            m.Lock(10);
         }
+        
 
         public void RecordPositions()
         {
+            m.Lock(10);
             m.Unlock();
             Console.WriteLine("Please set the initial position of the motor. Then press any key to record.");
             Console.ReadKey();

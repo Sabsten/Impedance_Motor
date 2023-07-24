@@ -12,9 +12,6 @@ namespace ViewModel
             while (!Console.KeyAvailable)
             {
                 m.RefreshInfo(30);
-                Console.WriteLine("Average Velocity : " + m.VelocityAverage);
-                Console.WriteLine("Average Torque : " + m.TorqueAverage);
-
                 if (m.TorqueAverage != 0 && m.VelocityAverage != 0)
                 {
                     if (previousTorque - m.TorqueAverage >= 0.13)
@@ -40,7 +37,6 @@ namespace ViewModel
         {
             Console.WriteLine(message);
             Console.ReadLine();
-            Environment.Exit(1);
         }
     }
 }

@@ -46,7 +46,6 @@ namespace Model
         {
             Console.WriteLine(message);
             Console.ReadLine();
-            Environment.Exit(1);
         }
     }
 }

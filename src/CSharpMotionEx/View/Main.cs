@@ -9,9 +9,10 @@ namespace ViewModel
     {
         static void Main()
         {
+            Interface MenuPrincipal = new Interface();
             while (true)
             {
-                Interface MenuPrincipal = new Interface();
+                Console.Clear();
                 MenuPrincipal.ModMenu();
                 MenuPrincipal.ModeSelection();
                 Console.Clear();
