@@ -19,7 +19,7 @@ namespace Model
                     }
                     if (Math.Abs(m.Constantes.EGG_TORQUE_SENSITIVITY) < Math.Abs(m.TorqueAverage))
                     {
-                        m.Lock(50);
+                        m.Lock(1000);
                     }
                 }
                 else
@@ -29,10 +29,11 @@ namespace Model
                         if (m.TorqueAverage < m.Constantes.EGG_TORQUE_SENSITIVITY)
                         {
                             m.Unlock();
+                            m.Wait(10000);
                         }
                     }
                 }
-                m.Wait(50);
+                m.Wait(100);
             }
 
             m.Lock(1000, cliNodeStopCodes.STOP_TYPE_DISABLE_RAMP);
