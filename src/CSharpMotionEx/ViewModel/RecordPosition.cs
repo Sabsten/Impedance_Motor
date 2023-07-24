@@ -22,7 +22,6 @@ namespace ViewModel
             Info.Add("2 - Record");
             while (true)
             {
-
                 m = motor;
                 while (true)
                 {
@@ -45,37 +44,41 @@ namespace ViewModel
                     }
                 }
             }
-            motor.RecordTrue();
+            m.RecordTrue();
             
 
         }
         public void Play()
         {
-            m.Lock(10);
+            m.Lock(1);
             
             //m.SetPositon(m_initial_position, true);
             foreach (var item in m_PositionList)
             {
                 if (item == 0)
                 {
-                    m.Lock(1, cliNodeStopCodes.STOP_TYPE_ABRUPT) ;
+                    m.Lock(1,cliNodeStopCodes.STOP_TYPE_ABRUPT);
                     m.Unlock();
 
                 }
                 else
                 {
-                    m.SetVelocity(item); 
+                    m.Wait(0);
+                    m.SetVelocity(item);
+                    
                 }
-                m.Wait(100);
+                m.Wait(1);
 
             }
             
-           // m.Lock(10, cliNodeStopCodes.STOP_TYPE_ABRUPT);
+            m.Lock(1, cliNodeStopCodes.STOP_TYPE_ABRUPT);
         }
 
 
         public void RecordPositions()
+
         {
+            
             m.Unlock();
             Console.WriteLine("Please set the initial position of the motor. Then press any key to record.");
             Console.ReadKey();
@@ -84,14 +87,15 @@ namespace ViewModel
             Console.WriteLine("Recording motion... Press any key to stop recording.");
             while (!Console.KeyAvailable)
             {
+                m.Unlock();
                 m.Wait(500);
-                m.RefreshInfo(10);
+                m.RefreshInfo(1);
                 m_PositionList.Add(m.VelocityAverage);
                 //m_PositionList2.Add(m.PositionAverage);
                 //Console.WriteLine("Average Velocity : " + m.VelocityAverage);
                 //Console.WriteLine("Average Torque : " + m.TorqueAverage);
             }
-            m.Lock(10, cliNodeStopCodes.STOP_TYPE_ABRUPT);
+            //m.Lock(10, cliNodeStopCodes.STOP_TYPE_ABRUPT);
         }
     }
 }
