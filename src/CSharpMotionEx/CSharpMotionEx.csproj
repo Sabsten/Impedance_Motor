@@ -178,7 +178,6 @@
     <Compile Include="Model\MotorManager.cs" />
     <Compile Include="Model\Node.cs" />
     <Compile Include="ViewModel\PositionReturn.cs" />
-    <Compile Include="View\ascii.cs" />
     <Compile Include="View\Spectr.cs" />
     <Compile Include="View\Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
