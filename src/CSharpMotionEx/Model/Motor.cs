@@ -10,7 +10,6 @@ namespace Model
 {
     class Motor
     {
-        private int itteration2 = 10000;
         private List<double> m_torquescalibrationList; 
         private List<double> m_torquesList;
         private List<double> m_velocitiesList;
@@ -99,10 +98,6 @@ namespace Model
             m_IsLocked = false;
         }
 
-        //
-        public void RecordFalse() { m_Node.NodeObject.EnableReq(false); }
-
-        public void RecordTrue() { m_Node.NodeObject.EnableReq(true); }
 
         public void RefreshInfo(int itteration)
         {
@@ -157,28 +152,6 @@ namespace Model
             m_IsAccelerate = false;
             double decel = -m_constantes.DECELERATION_MODEL_SLOPE * ((Math.Pow(VelocityAverage - m_constantes.DECELERATION_MODEL_SHIFT, 2)) / (m_constantes.DECELERATION_MODEL_WIDTH)) + m_constantes.DECELERATION_MODEL_VMAX - TorqueAverage * m_constantes.DECELERATION_MODEL_DAMPING_COEFFICIENT;
             return decel < 0 ? 0 : (decel > 80 ? 80 : decel);
-        }
-
-        // Vérifie si le sens change ou non
-        public bool Changeway(double vite)
-        {
-            if (vite < 0)
-            {
-                return true; }
-            else
-            { return false; }
-        }
-
-        public double Calibrate()
-
-        {   
-            for (int j = 0; j<itteration2; j++){
-
-                SetVelocity(1);
-                m_torquescalibrationList.Add(this.TorqueAverage);
-                }
-            return m_torquescalibrationList.Max();
-
         }
     }
 }

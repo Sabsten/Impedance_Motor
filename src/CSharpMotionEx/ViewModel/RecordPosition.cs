@@ -16,7 +16,7 @@ namespace ViewModel
         private cliValueDouble m_initial_position;
         public RecordPosition(Motor motor)
         {
-            motor.RecordFalse();
+            //motor.RecordFalse();
             List<string> Info = new List<string>();
             Info.Add("1 - Play");
             Info.Add("2 - Record");
@@ -44,7 +44,7 @@ namespace ViewModel
                     }
                 }
             }
-            m.RecordTrue();
+            //m.RecordTrue();
             
 
         }
