@@ -55,7 +55,7 @@ namespace Model
 
         public void Wait(int delay)
         {
-            m_myMgr.Delay(10);
+            m_myMgr.Delay((uint)delay);
         }
 
         public void WaitUntilMoveDone(uint delayRefresh)
@@ -64,6 +64,11 @@ namespace Model
             {
                 m_myMgr.Delay(delayRefresh);
             }
+        }
+
+        public bool MoveIsDone()
+        {
+            return m_Node.NodeObject.Motion.MoveIsDone();
         }
 
         public void SetVelocity(double velocityNumber)
@@ -79,6 +84,22 @@ namespace Model
             m_Node.NodeObject.EnableReq(true);
             m_IsLocked = true;
         }
+
+        public void Disabled()
+        {
+            m_Node.NodeObject.EnableReq(false);
+        }
+
+        public void Enabled()
+        {
+            m_Node.NodeObject.EnableReq(true);
+        }
+
+        public void Stop(cliNodeStopCodes stopType = cliNodeStopCodes.STOP_TYPE_ABRUPT)
+        {
+            m_Node.NodeObject.Motion.NodeStop(stopType);
+        }
+
 
         public void Unlock()
         {

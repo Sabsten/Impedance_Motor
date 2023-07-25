@@ -84,7 +84,7 @@ namespace Model
             Node.EnableReq(false);
             Node.AccUnit(cliINode._accUnits.RPM_PER_SEC);         // Set the units for Acceleration to RPM/SEC
             Node.VelUnit(cliINode._velUnits.RPM);                 // Set the units for Velocity to RPM
-            Node.TrqUnit(cliINode._trqUnits.AMPS);                // Set the units of torque to Amps
+            Node.TrqUnit(cliINode._trqUnits.PCT_MAX);                // Set the units of torque to Amps
             Node.Motion.AccLimit.Value(c.ACC_LIM_RPM_PER_SEC);      // Set Acceleration Limit (RPM/Sec)
             Node.Motion.VelLimit.Value(c.VEL_LIM_RPM);              // Set Velocity Limit (RPM)
             Node.Status.AlertsClear();
