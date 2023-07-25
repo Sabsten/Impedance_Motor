@@ -66,6 +66,21 @@ namespace Model
             }
         }
 
+        public void Terminate()
+        {
+            Lock(1000, cliNodeStopCodes.STOP_TYPE_DISABLE_RAMP);
+            WaitUntilMoveDone(500);
+            Console.ReadKey(true);
+            ErrorAndQuit("End program");
+        }
+
+        public void ErrorAndQuit(string message)
+        {
+            Console.WriteLine(message);
+            Console.ReadLine();
+            Environment.Exit(1);
+        }
+
         public bool MoveIsDone()
         {
             return m_Node.NodeObject.Motion.MoveIsDone();
@@ -76,23 +91,36 @@ namespace Model
             m_Node.NodeObject.Motion.MoveVelStart(velocityNumber);
         }
 
-        public void Lock(uint delay, cliNodeStopCodes stopType = cliNodeStopCodes.STOP_TYPE_ABRUPT)
+        public void Lock(cliNodeStopCodes stopType = cliNodeStopCodes.STOP_TYPE_ABRUPT)
         {
             m_Node.NodeObject.Motion.NodeStop(stopType);
-            m_Node.NodeObject.EnableReq(false);
-            m_myMgr.Delay(delay);
-            m_Node.NodeObject.EnableReq(true);
+            Disable();
             m_IsLocked = true;
         }
+        public void TempStop(cliNodeStopCodes stopType = cliNodeStopCodes.STOP_TYPE_ABRUPT)
+        {
+            m_Node.NodeObject.Motion.NodeStop(stopType);
+        }
 
-        public void Disabled()
+        public void Unlock()
+        {
+            Enable();
+            m_IsLocked = false;
+        }
+
+        public void Disable()
         {
             m_Node.NodeObject.EnableReq(false);
         }
 
-        public void Enabled()
+        public void Enable()
         {
             m_Node.NodeObject.EnableReq(true);
+        }
+
+        public void Initialize()
+        {
+            Enable();
         }
 
         public void Stop(cliNodeStopCodes stopType = cliNodeStopCodes.STOP_TYPE_ABRUPT)
@@ -100,14 +128,7 @@ namespace Model
             m_Node.NodeObject.Motion.NodeStop(stopType);
         }
 
-
-        public void Unlock()
-        {
-            m_IsLocked = false;
-        }
-
-        public event Action MotorPositionRefreshed;
-        public void RefreshInfo(int itteration)
+        public void RefreshInfo(int itteration = 10)
         {
             m_torquesList.Clear();
             m_velocitiesList.Clear();
@@ -122,10 +143,6 @@ namespace Model
                 m_velocitiesList.Add(m_velocityValue.Value());
                 m_positionsList.Add(m_positionValue.Value());
             }
-
-            // Trigger the event after the motor position is refreshed.
-            MotorPositionRefreshed?.Invoke();
-
         }
 
         public double Position
@@ -149,16 +166,20 @@ namespace Model
         {
             m_Node = Node;
         }
+
+
+        public void SetPositon(int target, bool absolute)
+        {
+            m_Node.NodeObject.Motion.MovePosnStart(target, absolute, false);
+        }
+
         public double AccelerationModel()
         {
             m_IsAccelerate = true;
             m_IsDecelerate = false;
             return m_constantes.ACCERATION_MODEL_VMAX / (1 + Math.Exp(m_constantes.ACCELERATION_MODEL_SLOPE * (m_constantes.ACCELERATION_MODEL_TORQUE_SENSITIVITY * TorqueAverage * VelocityAverage - m_constantes.ACCELERATION_MODEL_TOQUE_FLEXION_POINT)));
         }
-        public void SetPositon(int target, bool absolute)
-        {
-            m_Node.NodeObject.Motion.MovePosnStart(target, absolute, false);
-        }
+
         public double DecelerationModel()
         {
             m_IsDecelerate = true;

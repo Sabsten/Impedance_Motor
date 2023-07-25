@@ -7,46 +7,36 @@ namespace Model
     {
         public EggMode(Motor m)
         {
+            m.Initialize();
+
             while (!Console.KeyAvailable)
             {
-                m.RefreshInfo(10);
+                m.RefreshInfo();
 
-                if (m.IsLocked == false)
+                if (!m.IsLocked && m.VelocityAverage == 0)
                 {
-                    if (m.VelocityAverage == 0)
-                    {
-                         m.SetVelocity(m.Constantes.EGG_VELOCITY); 
-                    }
-                    if (Math.Abs(m.Constantes.EGG_TORQUE_SENSITIVITY) < Math.Abs(m.TorqueAverage))
-                    {
-                        m.Lock(1000);
-                    }
+                    m.SetVelocity(m.Constantes.EGG_VELOCITY);
                 }
-                else
+
+                if (IsUnderthreshold(m))
                 {
-                    if (Math.Abs(m.Constantes.EGG_TORQUE_SENSITIVITY) >= Math.Abs(m.TorqueAverage))
-                    {
-                        if (m.TorqueAverage < m.Constantes.EGG_TORQUE_SENSITIVITY)
-                        {
-                            m.Unlock();
-                            m.Wait(10000);
-                        }
-                    }
+                    //m.Lock(1000);
+                    m.Lock();
                 }
+                else if (m.IsLocked && !IsUnderthreshold(m))
+                {
+                    m.Unlock();
+                    //m.Wait(10000);
+                }
+
                 m.Wait(100);
             }
-
-            m.Lock(1000, cliNodeStopCodes.STOP_TYPE_DISABLE_RAMP);
-            m.WaitUntilMoveDone(500);
-            Console.ReadKey(true);
-            ErrorAndQuit("Fin program");
+            m.Terminate();
         }
 
-        public static void ErrorAndQuit(string message)
+        bool IsUnderthreshold(Motor m)
         {
-            Console.WriteLine(message);
-            Console.ReadLine();
-            Environment.Exit(1);
+            return m.Constantes.EGG_TORQUE_SENSITIVITY < Math.Abs(m.TorqueAverage);
         }
     }
 }
