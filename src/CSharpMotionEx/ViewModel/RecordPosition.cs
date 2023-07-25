@@ -55,19 +55,21 @@ namespace ViewModel
             //m.SetPositon(m_initial_position, true);
             foreach (var item in m_PositionList)
             {
+                m.Wait(10);
+
                 if (item == 0)
                 {
+                    //m.Wait(1);
                     m.Lock(1,cliNodeStopCodes.STOP_TYPE_ABRUPT);
                     m.Unlock();
 
                 }
                 else
                 {
-                    m.Wait(0);
+                    //m.Wait(4);
                     m.SetVelocity(item);
                     
                 }
-                m.Wait(1);
 
             }
             
@@ -85,12 +87,13 @@ namespace ViewModel
             m_initial_position = m.ActualPosition;
             m_PositionList = new List<double>();
             Console.WriteLine("Recording motion... Press any key to stop recording.");
+
             while (!Console.KeyAvailable)
             {
-                m.Unlock();
-                m.Wait(500);
-                m.RefreshInfo(1);
+                //m.Unlock();
+                m.RefreshInfo(10);
                 m_PositionList.Add(m.VelocityAverage);
+                m.Wait(10);
                 //m_PositionList2.Add(m.PositionAverage);
                 //Console.WriteLine("Average Velocity : " + m.VelocityAverage);
                 //Console.WriteLine("Average Torque : " + m.TorqueAverage);

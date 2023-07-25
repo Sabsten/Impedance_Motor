@@ -67,7 +67,7 @@ namespace Model
         //permet d'attendre
         public void Wait(int delay)
         {
-            m_myMgr.Delay(10);
+            m_myMgr.Delay((uint)delay) ;
         }
 
         public void WaitUntilMoveDone(uint delayRefresh)
