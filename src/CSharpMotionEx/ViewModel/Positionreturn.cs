@@ -30,7 +30,7 @@ namespace ViewModel
 
             }
 
-            m.Lock(1000, cliNodeStopCodes.STOP_TYPE_DISABLE_RAMP);
+            m.Lock(cliNodeStopCodes.STOP_TYPE_DISABLE_RAMP);
             m.WaitUntilMoveDone(500);
             Console.ReadKey(true);
             ErrorAndQuit("Fin program");

@@ -18,25 +18,15 @@ namespace Model
                     m.SetVelocity(m.Constantes.EGG_VELOCITY);
                 }
 
-                if (IsUnderthreshold(m))
+                if (!m.IsLocked && !m.IsUnderthreshold(m.Constantes.EGG_TORQUE_SENSITIVITY))
                 {
-                    //m.Lock(1000);
-                    m.Lock();
+                    m.StopWait();
+                    m.Wait(1000);
                 }
-                else if (m.IsLocked && !IsUnderthreshold(m))
-                {
-                    m.Unlock();
-                    //m.Wait(10000);
-                }
-
-                m.Wait(100);
+                
             }
             m.Terminate();
         }
 
-        bool IsUnderthreshold(Motor m)
-        {
-            return m.Constantes.EGG_TORQUE_SENSITIVITY < Math.Abs(m.TorqueAverage);
-        }
     }
 }

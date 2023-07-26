@@ -3,9 +3,9 @@ using System;
 
 namespace Model
 {
-    class Crisp
+    class Crips
     {
-        public Crisp(Motor m)
+        public Crips(Motor m)
         {
             m.Initialize();
 
