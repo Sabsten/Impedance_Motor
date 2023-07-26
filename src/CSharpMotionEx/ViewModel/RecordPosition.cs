@@ -71,7 +71,7 @@ namespace ViewModel
                 //Console.WriteLine("Average Velocity : " + m.VelocityAverage);
                 //Console.WriteLine("Average Torque : " + m.TorqueAverage);
             }
-            m.Lock(cliNodeStopCodes.STOP_TYPE_ABRUPT);
+            m.Lock(10,cliNodeStopCodes.STOP_TYPE_ABRUPT);
         }
     }
 }
