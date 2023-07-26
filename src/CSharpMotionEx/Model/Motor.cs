@@ -205,5 +205,18 @@ namespace Model
         public void RecordFalse() { m_Node.NodeObject.EnableReq(false); }
 
         public void RecordTrue() { m_Node.NodeObject.EnableReq(true); }
+        public void LockReccord(uint delay, cliNodeStopCodes stopType = cliNodeStopCodes.STOP_TYPE_ABRUPT)
+        {
+            m_Node.NodeObject.Motion.NodeStop(stopType);
+            m_Node.NodeObject.EnableReq(false);
+            m_myMgr.Delay(delay);
+            m_Node.NodeObject.EnableReq(true);
+            m_IsLocked = true;
+        }
+
+        public void UnlockReccord()
+        {
+            m_IsLocked = false;
+        }
     }
 }
