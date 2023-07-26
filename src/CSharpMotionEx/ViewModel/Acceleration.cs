@@ -19,7 +19,7 @@ namespace ViewModel
                 //Dans le cas ou le moteur ne bouge pas
                 if (m.VelocityAverage < 10 && m.VelocityAverage > -10 && m.MoveIsDone())
                 {
-                    m.Disabled();
+                    m.Disable();
                     //Démarrage sans assistance
                     double lastvelmoy = m.VelocityAverage;
                     double lasttorquemoy = m.TorqueAverage;
@@ -84,7 +84,7 @@ namespace ViewModel
                     {
                         velocityValue = maxvalue;
                     }
-                    m.Enabled();
+                    m.Enable();
                     m.SetVelocity(velocityValue);
                 }
                 //Dans le cas ou le moteur bouge et qu'il y a une torque dans le sens de rotation
@@ -92,12 +92,12 @@ namespace ViewModel
                 {
                     if (Math.Abs(m.TorqueAverage) > 20)
                     {
-                        m.Disabled();
+                        m.Disable();
                         while (Math.Abs(m.VelocityAverage) > 10)
                         {
                             m.RefreshInfo(15);
                         }
-                        m.Enabled();
+                        m.Enable();
                     }
                     else if (Math.Abs(m.TorqueAverage) > 0.5)
                     {
@@ -125,8 +125,8 @@ namespace ViewModel
                         if (Math.Abs(m.TorqueAverage) > 7)
                         {
                             m.Stop(cliNodeStopCodes.STOP_TYPE_ABRUPT);
-                            m.Disabled();
-                            m.Enabled();
+                            m.Disable();
+                            m.Enable();
                         }
 
 

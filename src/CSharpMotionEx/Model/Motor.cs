@@ -68,7 +68,7 @@ namespace Model
 
         public void Terminate()
         {
-            Lock(1000, cliNodeStopCodes.STOP_TYPE_DISABLE_RAMP);
+            Lock(cliNodeStopCodes.STOP_TYPE_DISABLE_RAMP);
             WaitUntilMoveDone(500);
             Console.ReadKey(true);
             ErrorAndQuit("End program");
@@ -108,14 +108,21 @@ namespace Model
             m_IsLocked = false;
         }
 
+        public bool IsUnderthreshold(double threshold)
+        {
+            return threshold > Math.Abs(TorqueAverage);
+        }
+
         public void Disable()
         {
             m_Node.NodeObject.EnableReq(false);
+            m_IsLocked = true;
         }
 
         public void Enable()
         {
             m_Node.NodeObject.EnableReq(true);
+            m_IsLocked = false;
         }
 
         public void Initialize()
@@ -123,7 +130,15 @@ namespace Model
             Enable();
         }
 
-        public void Stop(cliNodeStopCodes stopType = cliNodeStopCodes.STOP_TYPE_ABRUPT)
+        public void StopWait(cliNodeStopCodes stopType = cliNodeStopCodes.STOP_TYPE_ABRUPT)
+        {
+            m_Node.NodeObject.Motion.NodeStop(stopType);
+            Disable();
+            Enable();
+            
+        }
+
+        public void Stop( cliNodeStopCodes stopType = cliNodeStopCodes.STOP_TYPE_ABRUPT)
         {
             m_Node.NodeObject.Motion.NodeStop(stopType);
         }
