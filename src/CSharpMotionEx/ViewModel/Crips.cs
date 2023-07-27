@@ -1,5 +1,7 @@
 ﻿using sFndCLIWrapper;
 using System;
+using System.Drawing.Text;
+using System.Windows.Input;
 
 namespace Model
 {
@@ -7,16 +9,28 @@ namespace Model
     {
         public Crips(Motor m)
         {
+            
             m.Initialize();
 
             while (!Console.KeyAvailable)
             {
-                m.RefreshInfo();
+                m.RefreshInfo(50);
+                double lasttorquemoy = m.TorqueAverage;
+                
 
-                //Some code...
+                if (m.MoveIsDone() == false && lasttorquemoy>1)
+                {
+                    m.Unlock();
+                    
+                }
+                else if (m.MoveIsDone() == true)
+                {
+                    m.Lock();
+                }
 
                 m.Wait(100);
             }
+
             m.Terminate();
         }
 
