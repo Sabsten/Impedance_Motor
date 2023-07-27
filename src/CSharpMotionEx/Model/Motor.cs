@@ -1,4 +1,5 @@
 ﻿using CSharpMotionEx.Class;
+using MQTTnet.Client;
 using sFndCLIWrapper;
 using System;
 using System.Collections.Generic;
