@@ -14,20 +14,20 @@ namespace Model
 
     class MQTT
     {
-        private static Motor m_m;
+        private Motor m_m;
+        private IMqttClient mqttClient;
         public MQTT(Motor m)
         {
-            m_m = m;
-            _ = Main();
+            _ = Main(m);
         }
-        static async Task Main()
+        static async Task Main(Motor m)
         {
             var factory = new MqttFactory();
             var mqttClient = factory.CreateMqttClient();
 
             var options = new MqttClientOptionsBuilder()
                 //.WithClientId("MyClient")
-                .WithTcpServer("192.168.18.108", 1883) // Replace "localhost" with your broker address
+                .WithTcpServer("192.168.18.40", 1883) // Replace "localhost" with your broker address
                 .WithCleanSession()
                 .Build();
 
@@ -44,9 +44,11 @@ namespace Model
             while (true)
             {
                 var motorInfo = new MotorInfo
+                
                 {
-                    Speed = m_m.VelocityAverage,
-                    Position = m_m.PositionAverage
+                    
+                    Speed = m.VelocityAverage,
+                    Position = m.PositionAverage
                 };
 
                 var message = new MqttApplicationMessageBuilder()
@@ -66,7 +68,7 @@ namespace Model
                 }
 
                 // Publish every second
-                await Task.Delay(2000);
+                await Task.Delay(500);
             }
         }
     }
