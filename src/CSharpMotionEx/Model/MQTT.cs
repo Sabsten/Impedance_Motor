@@ -27,7 +27,7 @@ namespace Model
 
             var options = new MqttClientOptionsBuilder()
                 //.WithClientId("MyClient")
-                .WithTcpServer("192.168.0.125", 1883) // Replace "localhost" with your broker address
+                .WithTcpServer("192.168.18.108", 1883) // Replace "localhost" with your broker address
                 .WithCleanSession()
                 .Build();
 
@@ -66,7 +66,7 @@ namespace Model
                 }
 
                 // Publish every second
-                await Task.Delay(1000);
+                await Task.Delay(2000);
             }
         }
     }

@@ -24,6 +24,7 @@ namespace Model
         public double PositionAverage { get { return m_positionsList.Average(); } }
 
         private Node m_Node;
+        private MQTT m_MQTT = null;
 
         public cliValueDouble ActualPosition { get { return m_positionValue; } }
 
@@ -48,6 +49,7 @@ namespace Model
             m_positionValue = positionValue;
             m_constantes = new Constantes();
             m_myMgr = MyMgr;
+            m_MQTT = new MQTT(this);
         }
         public void SetNodePort(int portNumber)
         {
