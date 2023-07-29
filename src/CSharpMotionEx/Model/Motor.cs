@@ -49,7 +49,7 @@ namespace Model
             m_positionValue = positionValue;
             m_constantes = new Constantes();
             m_myMgr = MyMgr;
-            m_MQTT = new MQTT(this);
+           m_MQTT = new MQTT(this);
         }
         public void SetNodePort(int portNumber)
         {
@@ -160,6 +160,7 @@ namespace Model
                 m_torquesList.Add(m_torqueValue.Value());
                 m_velocitiesList.Add(m_velocityValue.Value());
                 m_positionsList.Add(m_positionValue.Value());
+                _ = m_MQTT.Publish();
             }
         }
 

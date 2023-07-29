@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MQTTnet;
 using MQTTnet.Client;
+using MQTTnet.Server;
 using Newtonsoft.Json;
 
 namespace Model
@@ -10,11 +11,13 @@ namespace Model
     {
         public double Speed { get; set; }
         public double Position { get; set; }
+
     }
 
     class MQTT
     {
         private static Motor m_m;
+        private static IMqttClient mqttClient;
         public MQTT(Motor m)
         {
             m_m = m;
@@ -27,7 +30,7 @@ namespace Model
 
             var options = new MqttClientOptionsBuilder()
                 //.WithClientId("MyClient")
-                .WithTcpServer("192.168.18.108", 1883) // Replace "localhost" with your broker address
+                .WithTcpServer("192.168.0.140", 1883) 
                 .WithCleanSession()
                 .Build();
 
@@ -40,33 +43,29 @@ namespace Model
                 Console.WriteLine("Error while connecting: " + e.Message);
                 return;
             }
+        }
 
-            while (true)
+        public async Task Publish()
+        {
+            var motorInfo = new MotorInfo
             {
-                var motorInfo = new MotorInfo
-                {
-                    Speed = m_m.VelocityAverage,
-                    Position = m_m.PositionAverage
-                };
+                Speed = m_m.VelocityAverage,
+                Position = m_m.PositionAverage
+            };
 
-                var message = new MqttApplicationMessageBuilder()
-                    .WithTopic("MotorInfo")
-                    .WithPayload(JsonConvert.SerializeObject(motorInfo))
-                    .WithRetainFlag()
-                    .Build();
+            var message = new MqttApplicationMessageBuilder()
+            .WithTopic("MotorInfo")
+            .WithPayload(JsonConvert.SerializeObject(motorInfo))
+            .WithRetainFlag()
+            .Build();
 
-                try
-                {
-                    await mqttClient.PublishAsync(message);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Error while publishing: " + e.Message);
-                    break;
-                }
-
-                // Publish every second
-                await Task.Delay(2000);
+            try
+            {
+                await mqttClient.PublishAsync(message);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error while publishing: " + e.Message);
             }
         }
     }
