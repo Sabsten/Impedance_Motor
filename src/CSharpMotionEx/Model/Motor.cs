@@ -33,8 +33,7 @@ namespace Model
 
         private int m_NodePort;
         public int NodePort { get { return m_NodePort; } }
-        private bool m_IsLocked;
-        public bool IsLocked { get { return m_IsLocked; } }
+        public bool IsLocked { get { return m_Node.NodeObject.EnableReq(); } }
 
         private bool m_IsAccelerate;
         public bool IsAccelerate { get { return m_IsAccelerate; } }
@@ -93,16 +92,28 @@ namespace Model
             return m_Node.NodeObject.Motion.MoveIsDone();
         }
 
+        public void ResetPositionToHome()
+        {
+            RefreshInfo(1);
+            int gap = (int)PositionAverage;
+            m_Node.NodeObject.Motion.AddToPosition(-gap);
+
+        }
+
         public void SetVelocity(double velocityNumber)
         {
             m_Node.NodeObject.Motion.MoveVelStart(velocityNumber);
+        }
+
+        public void SetPosition(int positionNumber)
+        {
+            m_Node.NodeObject.Motion.MovePosnStart(positionNumber,false,false) ;
         }
 
         public void Lock(cliNodeStopCodes stopType = cliNodeStopCodes.STOP_TYPE_ABRUPT)
         {
             m_Node.NodeObject.Motion.NodeStop(stopType);
             Disable();
-            m_IsLocked = true;
         }
         public void TempStop(cliNodeStopCodes stopType = cliNodeStopCodes.STOP_TYPE_ABRUPT)
         {
@@ -112,7 +123,6 @@ namespace Model
         public void Unlock()
         {
             Enable();
-            m_IsLocked = false;
         }
 
         public bool IsUnderthreshold(double threshold)
@@ -123,13 +133,12 @@ namespace Model
         public void Disable()
         {
             m_Node.NodeObject.EnableReq(false);
-            m_IsLocked = true;
         }
+
 
         public void Enable()
         {
             m_Node.NodeObject.EnableReq(true);
-            m_IsLocked = false;
         }
 
         public void Initialize()
@@ -206,6 +215,12 @@ namespace Model
             m_Node.NodeObject.Motion.MovePosnStart(target, absolute, false);
         }
 
+
+
+
+
+        //Modeles des mouvements
+
         public double AccelerationModel()
         {
             m_IsAccelerate = true;
@@ -220,21 +235,26 @@ namespace Model
             double decel = -m_constantes.DECELERATION_MODEL_SLOPE * ((Math.Pow(VelocityAverage - m_constantes.DECELERATION_MODEL_SHIFT, 2)) / (m_constantes.DECELERATION_MODEL_WIDTH)) + m_constantes.DECELERATION_MODEL_VMAX - TorqueAverage * m_constantes.DECELERATION_MODEL_DAMPING_COEFFICIENT;
             return decel < 0 ? 0 : (decel > 80 ? 80 : decel);
         }
-        public void RecordFalse() { m_Node.NodeObject.EnableReq(false); }
 
-        public void RecordTrue() { m_Node.NodeObject.EnableReq(true); }
-        public void LockReccord(uint delay, cliNodeStopCodes stopType = cliNodeStopCodes.STOP_TYPE_ABRUPT)
+
+        public double PositionDependingOnTorque(double torqueMoy)
         {
-            m_Node.NodeObject.Motion.NodeStop(stopType);
-            m_Node.NodeObject.EnableReq(false);
-            m_myMgr.Delay(delay);
-            m_Node.NodeObject.EnableReq(true);
-            m_IsLocked = true;
+            double position = 1000 / (1 + Math.Exp(-0.1 * (torqueMoy * 2 - 30)));
+            return (position);
         }
 
-        public void UnlockReccord()
+        public double VelocityDependingOnPositionForward(double diff)
         {
-            m_IsLocked = false;
+            double velocity = 50 - (50 / (1 + Math.Exp(-0.03 * (diff * 0.08 - 200))));
+            return (velocity);
         }
+        public double VelocityDependingOnPositionBackward(double diff)
+        {
+            double velocity = (50 / (1 + Math.Exp(-0.1 * (diff * 0.03 - 30))));
+            return (velocity);
+        }
+
+
+
     }
 }
