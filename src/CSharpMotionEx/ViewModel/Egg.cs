@@ -1,5 +1,6 @@
 ﻿using sFndCLIWrapper;
 using System;
+using System.Diagnostics;
 
 namespace Model
 {
@@ -8,11 +9,10 @@ namespace Model
         public EggMode(Motor m)
         {
             m.Initialize();
-
             while (!Console.KeyAvailable)
             {
                 m.RefreshInfo();
-
+                Console.WriteLine(m.Position);
                 if (!m.IsLocked && m.VelocityAverage == 0)
                 {
                     m.SetVelocity(m.Constantes.EGG_VELOCITY);
@@ -23,7 +23,6 @@ namespace Model
                     m.StopWait();
                     m.Wait(1000);
                 }
-                
             }
             m.Terminate();
         }

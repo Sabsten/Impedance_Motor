@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using MQTTnet;
 using MQTTnet.Client;
@@ -26,11 +27,11 @@ namespace Model
         static async Task Main()
         {
             var factory = new MqttFactory();
-            var mqttClient = factory.CreateMqttClient();
+            mqttClient = factory.CreateMqttClient();
 
             var options = new MqttClientOptionsBuilder()
                 //.WithClientId("MyClient")
-                .WithTcpServer("192.168.0.140", 1883) 
+                .WithTcpServer("192.168.18.40", 1883) 
                 .WithCleanSession()
                 .Build();
 

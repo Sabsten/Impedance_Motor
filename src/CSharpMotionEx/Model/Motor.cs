@@ -1,5 +1,6 @@
 ﻿using CSharpMotionEx.Class;
 using MQTTnet.Client;
+using MQTTnet.Server;
 using sFndCLIWrapper;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,8 @@ namespace Model
         private Node m_Node;
         private MQTT m_MQTT = null;
 
+        private long m_now;
+        private long m_now2;
         public cliValueDouble ActualPosition { get { return m_positionValue; } }
 
         private int m_NodePort;
@@ -49,7 +52,8 @@ namespace Model
             m_positionValue = positionValue;
             m_constantes = new Constantes();
             m_myMgr = MyMgr;
-           m_MQTT = new MQTT(this);
+            m_MQTT = new MQTT(this);
+            m_now = DateTimeOffset.Now.ToUnixTimeSeconds();
         }
         public void SetNodePort(int portNumber)
         {
@@ -151,7 +155,7 @@ namespace Model
             m_torquesList.Clear();
             m_velocitiesList.Clear();
             m_positionsList.Clear();
-
+            m_now2 = DateTimeOffset.Now.ToUnixTimeSeconds();
             for (int j = 0; j < itteration; j++)
             {
                 m_torqueValue.Refresh();
@@ -160,8 +164,18 @@ namespace Model
                 m_torquesList.Add(m_torqueValue.Value());
                 m_velocitiesList.Add(m_velocityValue.Value());
                 m_positionsList.Add(m_positionValue.Value());
-                _ = m_MQTT.Publish();
+                if ((m_now2 - m_now) > 1 / 100)
+                {
+                    m_now = DateTimeOffset.Now.ToUnixTimeSeconds();
+                    Publish();
+                }
             }
+
+        }
+
+        public void Publish()
+        {
+            _ = m_MQTT.Publish();
         }
 
         public double Position
