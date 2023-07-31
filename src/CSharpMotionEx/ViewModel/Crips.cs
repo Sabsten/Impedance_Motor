@@ -15,10 +15,10 @@ namespace Model
             while (!Console.KeyAvailable)
             {
                 m.RefreshInfo(50);
-                double lasttorquemoy = m.TorqueAverage;
+                double torqueset = m.TorqueAverage;
                 
 
-                if (m.MoveIsDone() == false && lasttorquemoy>1)
+                if (m.MoveIsDone() == false && torqueset>1)
                 {
                     m.Unlock();
                     
