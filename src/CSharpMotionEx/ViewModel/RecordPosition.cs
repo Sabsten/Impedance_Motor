@@ -5,25 +5,26 @@ using sFndCLIWrapper;
 using Model;
 using Spectre.Console;
 using System.Windows.Documents;
+using System.Diagnostics;
 
 namespace ViewModel
 {
     class RecordPosition
     {
+        private List<double> m_VelocityList;
         private List<double> m_PositionList;
-        private List<double> m_PositionList2;
         private Motor m;
-        private cliValueDouble m_initial_position;
+        private int precision = 60;
+
         public RecordPosition(Motor motor)
         {
-            motor.RecordFalse();
             List<string> Info = new List<string>();
             Info.Add("1 - Play");
-            Info.Add("2 - Record");
+            Info.Add("2 - Record based on velocity");
+            Info.Add("3 - Record based on position");
+            m = motor;
+            m.Disable();
             while (true)
-            {
-                m = motor;
-                while (true)
                 {
                     string choice = AnsiConsole.Prompt(
                         new SelectionPrompt<string>()
@@ -35,67 +36,98 @@ namespace ViewModel
                     switch (choice.Split(" - ".ToCharArray())[0])
                     {
                         case "1":
-                            Play();
-
+                            if(!(m_VelocityList == null))
+                        {
+                            PlayVelocities();
+                        }
+                                else if (!(m_PositionList == null))
+                        {
+                                PlayPositions();
+                            }
                             break;
                         case "2":
+                            RecordVelocities();
+                            break;
+                        case "3":
                             RecordPositions();
                             break;
                     }
                 }
-            }
             
 
 
         }
-        public void Play()
+        public void PlayVelocities()
         {
-            m.LockReccord(1);
-
+            m.Enable();
             //m.SetPositon(m_initial_position, true);
-            foreach (var item in m_PositionList)
+            foreach (var item in m_VelocityList)
             {
                 if (item == 0)
                 {
-                    m.LockReccord(1, cliNodeStopCodes.STOP_TYPE_ABRUPT);
-                    m.UnlockReccord();
-
+                    //m.LockReccord(1, cliNodeStopCodes.STOP_TYPE_RAMP);
+                    m.Stop(cliNodeStopCodes.STOP_TYPE_ABRUPT);
                 }
                 else
                 {
-                    m.Wait(10);
                     m.SetVelocity(item);
 
                 }
-                m.Wait(10);
-
+                m.Wait(30);
             }
-
-            m.LockReccord(1, cliNodeStopCodes.STOP_TYPE_ABRUPT);
+            m.Disable();
         }
 
+        public void PlayPositions()
+        {
+            m.ResetPositionToHome();
+            m.Enable();
+            foreach (var item in m_PositionList)
+            {
+                m.RefreshInfo(1);
+                Console.WriteLine((int)(item - m.PositionAverage));
+                m.SetPosition((int)(item - m.PositionAverage));
+                while (m.MoveIsDone() == false)
+                {
+                    m.Wait(5);
+                }
+            }
+            m.Disable();
+        }
+
+
+        public void RecordVelocities()
+
+        {
+            Console.WriteLine("Please set the initial position of the motor. Then press any key to record.");
+            Console.ReadKey();
+            m_PositionList = null;
+            m_VelocityList = new List<double>();
+            Console.WriteLine("Recording motion... Press any key to stop recording.");
+            while (!Console.KeyAvailable)
+            {
+                m.Wait(30);
+                m.RefreshInfo(1);
+                m_VelocityList.Add(m.VelocityAverage);
+            }
+        }
 
         public void RecordPositions()
 
         {
-
-            m.UnlockReccord();
             Console.WriteLine("Please set the initial position of the motor. Then press any key to record.");
             Console.ReadKey();
-            m_initial_position = m.ActualPosition;
+            m.ResetPositionToHome();
+            m_VelocityList = null;
             m_PositionList = new List<double>();
             Console.WriteLine("Recording motion... Press any key to stop recording.");
             while (!Console.KeyAvailable)
             {
-                m.UnlockReccord();
-                m.Wait(10);
+                m.Wait(500);
                 m.RefreshInfo(1);
-                m_PositionList.Add(m.VelocityAverage);
-                //m_PositionList2.Add(m.PositionAverage);
-                //Console.WriteLine("Average Velocity : " + m.VelocityAverage);
-                //Console.WriteLine("Average Torque : " + m.TorqueAverage);
+                Console.WriteLine(m.PositionAverage);
+                m_PositionList.Add(m.PositionAverage);
             }
-            //m.Lock(10, cliNodeStopCodes.STOP_TYPE_ABRUPT);
         }
     }
 }
