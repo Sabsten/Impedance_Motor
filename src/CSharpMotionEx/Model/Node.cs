@@ -35,10 +35,10 @@ namespace CSharpMotionEx.Class
         {
             if (NodeObject != null)
             {
-                m_NodeType = "Node[{0}]: type={1} " + n + " " + NodeObject.Info.NodeType();
-                m_UserID = "userID: {0} " + NodeObject.Info.UserID;
-                m_Model = "Model: {0} " + NodeObject.Info.Model.Value();
-                m_SerialNumber = "Serial #: {0}" + NodeObject.Info.SerialNumber.Value();
+                m_NodeType = NodeObject.Info.NodeType().ToString();
+                m_UserID = NodeObject.Info.UserID.Value();
+                m_Model = NodeObject.Info.Model.Value();
+                m_SerialNumber = NodeObject.Info.SerialNumber.Value().ToString();
                 m_torqueValue = NodeObject.Motion.TrqMeasured;
                 m_velocityValue = NodeObject.Motion.VelMeasured;
                 m_positionValue = NodeObject.Motion.PosnMeasured;

@@ -37,16 +37,14 @@ namespace ViewModel
                         case "4":
                             Console.WriteLine("");
                             _ = new RecordPosition(MotorList[0]);
-                            
                             break;
                         case "5":
                             Console.WriteLine("");
                             _ = new PositionReturn(MotorList[0]);
-
                             break;
                         case "6":
                             Console.WriteLine("");
-                            _ = new FlipFlap(MotorList[0], MotorList[0]);
+                            _ = new FlipFlap(MotorList[0], MotorList[1]);
                             break;
                         case "7":
                             Console.WriteLine("");
