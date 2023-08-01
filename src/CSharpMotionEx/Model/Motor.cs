@@ -5,6 +5,7 @@ using sFndCLIWrapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml;
 using ViewModel;
 namespace Model
 {
@@ -52,7 +53,6 @@ namespace Model
             m_constantes = new Constantes();
             m_myMgr = MyMgr;
             m_MQTT = new MQTT(this);
-            m_now = DateTimeOffset.Now.ToUnixTimeSeconds();
         }
         public void SetNodePort(int portNumber)
         {
@@ -103,6 +103,7 @@ namespace Model
         public void SetVelocity(double velocityNumber)
         {
             m_Node.NodeObject.Motion.MoveVelStart(velocityNumber);
+            Publish(velocityNumber, VelocityAverage);
         }
 
         public void SetPosition(int positionNumber)
@@ -144,11 +145,14 @@ namespace Model
         public void Initialize()
         {
             Enable();
+            ResetPositionToHome();
+
         }
 
         public void StopWait(cliNodeStopCodes stopType = cliNodeStopCodes.STOP_TYPE_ABRUPT)
         {
             m_Node.NodeObject.Motion.NodeStop(stopType);
+            Publish(0, PositionAverage);
             Disable();
             Enable();
             
@@ -157,6 +161,8 @@ namespace Model
         public void Stop( cliNodeStopCodes stopType = cliNodeStopCodes.STOP_TYPE_ABRUPT)
         {
             m_Node.NodeObject.Motion.NodeStop(stopType);
+            Publish(0, PositionAverage);
+
         }
 
         public void RefreshInfo(int itteration = 10)
@@ -164,7 +170,8 @@ namespace Model
             m_torquesList.Clear();
             m_velocitiesList.Clear();
             m_positionsList.Clear();
-            m_now2 = DateTimeOffset.Now.ToUnixTimeSeconds();
+            m_now2 = DateTimeOffset.Now.ToUnixTimeSeconds();    
+            Console.WriteLine(m_Node.NodeObject.Info.PositioningResolution.Value());
             for (int j = 0; j < itteration; j++)
             {
                 m_torqueValue.Refresh();
@@ -173,18 +180,12 @@ namespace Model
                 m_torquesList.Add(m_torqueValue.Value());
                 m_velocitiesList.Add(m_velocityValue.Value());
                 m_positionsList.Add(m_positionValue.Value());
-                if ((m_now2 - m_now) > 1 / 100)
-                {
-                    m_now = DateTimeOffset.Now.ToUnixTimeSeconds();
-                    Publish();
-                }
             }
-
         }
 
-        public void Publish()
+        public void Publish(double velocity, double position)
         {
-            _ = m_MQTT.Publish();
+            _ = m_MQTT.Publish(velocity, position);
         }
 
         public double Position
@@ -214,10 +215,6 @@ namespace Model
         {
             m_Node.NodeObject.Motion.MovePosnStart(target, absolute, false);
         }
-
-
-
-
 
         //Modeles des mouvements
 

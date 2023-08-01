@@ -12,13 +12,12 @@ namespace Model
             while (!Console.KeyAvailable)
             {
                 m.RefreshInfo();
-                Console.WriteLine(m.Position);
-                if (!m.IsLocked && m.VelocityAverage == 0)
+                if (m.IsLocked && m.VelocityAverage == 0)
                 {
                     m.SetVelocity(m.Constantes.EGG_VELOCITY);
                 }
 
-                if (!m.IsLocked && !m.IsUnderthreshold(m.Constantes.EGG_TORQUE_SENSITIVITY))
+                if (m.IsLocked && !m.IsUnderthreshold(m.Constantes.EGG_TORQUE_SENSITIVITY))
                 {
                     m.StopWait();
                     m.Wait(1000);
