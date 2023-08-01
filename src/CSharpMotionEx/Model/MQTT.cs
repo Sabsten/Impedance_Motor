@@ -44,13 +44,18 @@ namespace Model
             }
         }
 
+        public static double Modulo6400(double number)
+        {
+            return (number % 6400 + 6400) % 6400;
+        }
+
         public async Task Publish(double Velocity, double Position)
         {
 
             var motorInfo = new MotorInfo
             {
                 Speed = Velocity * 6,
-                Position = Position
+                Position = Modulo6400(Position)*0.001* (180 / 3.14)
             };
 
             var message = new MqttApplicationMessageBuilder()

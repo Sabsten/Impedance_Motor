@@ -151,8 +151,8 @@ namespace Model
 
         public void StopWait(cliNodeStopCodes stopType = cliNodeStopCodes.STOP_TYPE_ABRUPT)
         {
-            m_Node.NodeObject.Motion.NodeStop(stopType);
             Publish(0, PositionAverage);
+            m_Node.NodeObject.Motion.NodeStop(stopType);
             Disable();
             Enable();
             
@@ -160,8 +160,8 @@ namespace Model
 
         public void Stop( cliNodeStopCodes stopType = cliNodeStopCodes.STOP_TYPE_ABRUPT)
         {
-            m_Node.NodeObject.Motion.NodeStop(stopType);
             Publish(0, PositionAverage);
+            m_Node.NodeObject.Motion.NodeStop(stopType);
 
         }
 
