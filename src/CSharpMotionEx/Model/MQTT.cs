@@ -65,7 +65,7 @@ namespace Model
                 .Build();
             try
             {
-                mqttClient.PublishAsync(message);
+                await mqttClient.PublishAsync(message);
             }
             catch (Exception e)
             {

@@ -1,11 +1,8 @@
 ﻿using CSharpMotionEx.Class;
-using MQTTnet.Client;
-using MQTTnet.Server;
 using sFndCLIWrapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml;
 using ViewModel;
 namespace Model
 {
@@ -28,13 +25,13 @@ namespace Model
         private Node m_Node;
         private MQTT m_MQTT = null;
 
-        private long m_now;
         private long m_now2;
         public cliValueDouble ActualPosition { get { return m_positionValue; } }
 
-        private int m_NodePort;
-        public int NodePort { get { return m_NodePort; } }
         public bool IsLocked { get { return m_Node.NodeObject.EnableReq(); } }
+
+        public double Position{get { return m_positionValue.Value(); }}
+
 
         private bool m_IsAccelerate;
         public bool IsAccelerate { get { return m_IsAccelerate; } }
@@ -54,11 +51,6 @@ namespace Model
             m_myMgr = MyMgr;
             m_MQTT = new MQTT(this);
         }
-        public void SetNodePort(int portNumber)
-        {
-            m_NodePort = portNumber;
-        }
-
         public void Wait(int delay)
         {
             m_myMgr.Delay((uint)delay);
@@ -97,7 +89,6 @@ namespace Model
             RefreshInfo(1);
             int gap = (int)PositionAverage;
             m_Node.NodeObject.Motion.AddToPosition(-gap);
-
         }
 
         public void SetVelocity(double velocityNumber)
@@ -146,7 +137,6 @@ namespace Model
         {
             Enable();
             ResetPositionToHome();
-
         }
 
         public void StopWait(cliNodeStopCodes stopType = cliNodeStopCodes.STOP_TYPE_ABRUPT)
@@ -188,21 +178,9 @@ namespace Model
             _ = m_MQTT.Publish(velocity, position);
         }
 
-        public double Position
-        {
-            get { return m_positionValue.Value(); }
-        }
-
         public void GoHome()
         {
             m_positionValue = m_Node.PositionValue;
-        }
-
-        public void ClearInfo()
-        {
-            m_torquesList.Clear();
-            m_velocitiesList.Clear();
-            m_positionsList.Clear();
         }
 
         public void AddNode(Node Node)
@@ -215,43 +193,26 @@ namespace Model
         {
             m_Node.NodeObject.Motion.MovePosnStart(target, absolute, false);
         }
-
+        
         //Modeles des mouvements
 
         public double AccelerationModel()
         {
             m_IsAccelerate = true;
             m_IsDecelerate = false;
-            return m_constantes.ACCERATION_MODEL_VMAX / (1 + Math.Exp(m_constantes.ACCELERATION_MODEL_SLOPE * (m_constantes.ACCELERATION_MODEL_TORQUE_SENSITIVITY * TorqueAverage * VelocityAverage - m_constantes.ACCELERATION_MODEL_TOQUE_FLEXION_POINT)));
+            return m_constantes.ACCELERATION_MODEL_VMAX / (1 + Math.Exp(m_constantes.ACCELERATION_MODEL_SLOPE * (m_constantes.ACCELERATION_MODEL_TORQUE_SENSITIVITY * TorqueAverage * VelocityAverage - m_constantes.ACCELERATION_MODEL_TOQUE_FLEXION_POINT)));
         }
 
         public double DecelerationModel()
         {
             m_IsDecelerate = true;
             m_IsAccelerate = false;
-            double decel = -m_constantes.DECELERATION_MODEL_SLOPE * ((Math.Pow(VelocityAverage - m_constantes.DECELERATION_MODEL_SHIFT, 2)) / (m_constantes.DECELERATION_MODEL_WIDTH)) + m_constantes.DECELERATION_MODEL_VMAX - TorqueAverage * m_constantes.DECELERATION_MODEL_DAMPING_COEFFICIENT;
-            return decel < 0 ? 0 : (decel > 80 ? 80 : decel);
+            return -m_constantes.DECELERATION_MODEL_SLOPE * ((Math.Pow(VelocityAverage - m_constantes.DECELERATION_MODEL_SHIFT, 2)) / (m_constantes.DECELERATION_MODEL_WIDTH)) + m_constantes.DECELERATION_MODEL_VMAX - TorqueAverage * m_constantes.DECELERATION_MODEL_DAMPING_COEFFICIENT;
         }
 
 
-        public double PositionDependingOnTorque(double torqueMoy)
-        {
-            double position = 1000 / (1 + Math.Exp(-0.1 * (torqueMoy * 2 - 30)));
-            return (position);
-        }
-
-        public double VelocityDependingOnPositionForward(double diff)
-        {
-            double velocity = 50 - (50 / (1 + Math.Exp(-0.03 * (diff * 0.08 - 200))));
-            return (velocity);
-        }
-        public double VelocityDependingOnPositionBackward(double diff)
-        {
-            double velocity = (50 / (1 + Math.Exp(-0.1 * (diff * 0.03 - 30))));
-            return (velocity);
-        }
-
-
-
+        public double PositionDependingOnTorque(double torqueMoy){return 1000 / (1 + Math.Exp(-0.1 * (torqueMoy * 2 - 30)));}
+        public double VelocityDependingOnPositionForward(double diff){return 50 * (1 - (1 / (1 + Math.Exp(-0.03 * (diff * 0.08 - 200)))));}
+        public double VelocityDependingOnPositionBackward(double diff){ return (50 / (1 + Math.Exp(-0.1 * (diff * 0.03 - 30))));}
     }
 }

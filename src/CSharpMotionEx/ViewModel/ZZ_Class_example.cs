@@ -22,7 +22,7 @@ namespace Model
 
         string YourBestFunction()
         {
-            return "Seb is the best";
+            return "You are the best !";
         }
     }
 }

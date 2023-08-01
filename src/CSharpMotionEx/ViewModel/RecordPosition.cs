@@ -14,7 +14,6 @@ namespace ViewModel
         private List<double> m_VelocityList;
         private List<double> m_PositionList;
         private Motor m;
-        private int precision = 60;
 
         public RecordPosition(Motor motor)
         {

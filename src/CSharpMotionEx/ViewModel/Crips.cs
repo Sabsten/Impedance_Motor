@@ -11,7 +11,7 @@ namespace Model
             while (!Console.KeyAvailable)
             {
                 m.RefreshInfo(50);
-                if (m.MoveIsDone() == false && m.TorqueAverage > 1)
+                if (!m.MoveIsDone() && m.TorqueAverage > 1)
                 {
                     m.Unlock();
                 }

@@ -154,7 +154,6 @@ namespace ViewModel
                     }
                 }
                 m.Wait(100);
-                m.ClearInfo();
             }
         }
 

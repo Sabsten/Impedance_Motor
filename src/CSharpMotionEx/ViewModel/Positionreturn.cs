@@ -110,10 +110,6 @@ namespace ViewModel
                 m.SetVelocity(posDiff);
                 m.Wait(100);
             }
-
-
-
-            ErrorAndQuit("Fin program");
         }
 
         public static void ErrorAndQuit(string message)
