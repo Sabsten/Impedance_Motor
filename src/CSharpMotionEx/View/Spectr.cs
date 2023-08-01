@@ -7,6 +7,7 @@ using System.Xml;
 using Model;
 using Newtonsoft.Json;
 using Spectre.Console;
+
 namespace ViewModel
 {
     class Interface
@@ -19,38 +20,65 @@ namespace ViewModel
         public string NumMotorRequired { get { return m_NumMotorRequired; } }
         private List<Motor> m_motors;
         public List<Motor> motors { get { return m_motors; } }
+
         public void ModMenu()
         {
-            AnsiConsole.Write(
-                new FigletText("Impedance-Motor")
-                    .Color(Color.Red));
-
             m_ModeListObjectt = ParseJson(GetModsDirectory());
+            int lastWindowWidth = 0;
 
-            // Crée un tableau
-            var table = new Table()
-                .BorderColor(Color.Red)
-                .AddColumn(new TableColumn("[u]Num[/]").Centered())
-                .AddColumn(new TableColumn("[u]Name[/]").Centered())
-                .AddColumn(new TableColumn("[u]Explaination[/]").Centered());
-            m_ModeList = new List<string>();
-            // Ajoute une ligne au tableau
-            foreach (var mod in m_ModeListObjectt)
+            while (true)
             {
-                table.AddRow(new Text(mod.Number.ToString()).Centered(),
-                             new Text(mod.Name).Centered(),
-                             new Text(mod.Explaination).Centered());
-                m_ModeList.Add(mod.Number + " - " + mod.Name);
-                table.AddRow("","","");
-            }
+                int windowWidth = Console.WindowWidth;
 
-            AnsiConsole.Write(
-                    new Panel(table)
-                        .Expand()
+                if (windowWidth != lastWindowWidth)
+                {
+                    AnsiConsole.Clear();
+
+                    AnsiConsole.Write(
+                        new FigletText("Impedance-Motor")
+                            .Color(Color.Red));
+
+                    int tableWidth = (int)(windowWidth * 0.8);
+
+                    var table = new Table()
+                        .Width(tableWidth)
                         .BorderColor(Color.Red)
-                        .Header("[[ [bold underline blue on white]List of Mods[/] ]]"));
-            AnsiConsole.Write("");
+                        .AddColumn(new TableColumn("[u]Num[/]").Centered())
+                        .AddColumn(new TableColumn("[u]Name[/]").Centered())
+                        .AddColumn(new TableColumn("[u]Explaination[/]").Centered());
+                    m_ModeList = new List<string>();
+
+                    foreach (var mod in m_ModeListObjectt)
+                    {
+                        table.AddRow(new Text(mod.Number.ToString()).Centered(),
+                                     new Text(mod.Name).Centered(),
+                                     new Text(mod.Explaination).Centered());
+                        m_ModeList.Add(mod.Number + " - " + mod.Name);
+                        table.AddRow("", "", "");
+                    }
+
+                    AnsiConsole.Write(
+                            new Panel(table)
+                                .Expand()
+                                .BorderColor(Color.Red)
+                                .Header("[[ [bold underline blue on white]List of Mods[/] ]]"));
+
+                    lastWindowWidth = windowWidth;
+                }
+
+                System.Threading.Thread.Sleep(500);
+
+                if (Console.KeyAvailable)
+                {
+                    var keyInfo = Console.ReadKey(true);
+                    if (keyInfo.Key == ConsoleKey.Enter)
+                    {
+                        break;
+                    }
+                }
+            }
         }
+
         public void ModeSelection()
         {
             string framework = AnsiConsole.Prompt(
@@ -79,15 +107,13 @@ namespace ViewModel
                 }
                 for (int i = Counter; i < nodeLimit; i++)
                 {
-                    // Code to be executed in each iteration
                     list.Add("Port " + i + " : Not found");
                 }
 
-                // Ask for the user's favorite fruits
                 var fruits = AnsiConsole.Prompt(
                     new MultiSelectionPrompt<string>()
                         .Title("What [green]motor[/] do you want to use ?")
-                        .NotRequired() // Not required to have a favorite fruit
+                        .NotRequired()
                         .PageSize(10)
                         .MoreChoicesText("[grey](Move up and down to select motor(s))[/]")
                         .InstructionsText(
@@ -97,6 +123,7 @@ namespace ViewModel
             }
             m_motors = MManager.MotorList;
         }
+
         string GetModsDirectory(string cfgFileName = "statham.json")
         {
             string currentDirectory = Directory.GetCurrentDirectory();
@@ -110,7 +137,7 @@ namespace ViewModel
                 }
                 else
                 {
-                    break; // Si le répertoire parent n'existe pas, on sort de la boucle
+                    break;
                 }
             }
 
@@ -122,6 +149,7 @@ namespace ViewModel
             ModsCollection modsCollection = JsonConvert.DeserializeObject<ModsCollection>(File.ReadAllText(json));
             return modsCollection.Mods;
         }
+
         public class Mod
         {
             public int Number { get; set; }
@@ -129,12 +157,10 @@ namespace ViewModel
             public string Explaination { get; set; }
             public string Motor_required { get; set; }
         }
+
         public class ModsCollection
         {
             public List<Mod> Mods { get; set; }
         }
-
-
-
     }
 }
