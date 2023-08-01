@@ -5,6 +5,7 @@ using MQTTnet;
 using MQTTnet.Client;
 using MQTTnet.Server;
 using Newtonsoft.Json;
+using ScottPlot.Renderable;
 
 namespace Model
 {
@@ -17,11 +18,9 @@ namespace Model
 
     class MQTT
     {
-        private static Motor m_m;
         private static IMqttClient mqttClient;
         public MQTT(Motor m)
         {
-            m_m = m;
             _ = Main();
         }
         static async Task Main()
@@ -34,7 +33,6 @@ namespace Model
                 .WithTcpServer("192.168.18.40", 1883) 
                 .WithCleanSession()
                 .Build();
-
             try
             {
                 await mqttClient.ConnectAsync(options);
@@ -46,23 +44,28 @@ namespace Model
             }
         }
 
-        public async Task Publish()
+        public static double Modulo6400(double number)
         {
+            return (number % 6400 + 6400) % 6400;
+        }
+
+        public async Task Publish(double Velocity, double Position)
+        {
+
             var motorInfo = new MotorInfo
             {
-                Speed = m_m.VelocityAverage,
-                Position = m_m.PositionAverage
+                Speed = Velocity * 6,
+                Position = Modulo6400(Position)*0.001* (180 / 3.14)
             };
 
             var message = new MqttApplicationMessageBuilder()
-            .WithTopic("MotorInfo")
-            .WithPayload(JsonConvert.SerializeObject(motorInfo))
-            .WithRetainFlag()
-            .Build();
-
+                .WithTopic("MotorInfo")
+                .WithPayload(JsonConvert.SerializeObject(motorInfo))
+                .WithRetainFlag()
+                .Build();
             try
             {
-                await mqttClient.PublishAsync(message);
+                mqttClient.PublishAsync(message);
             }
             catch (Exception e)
             {
