@@ -2,7 +2,10 @@
   "Mods": [
     {
       "Number": 1,
-      "Name": "Egg Mode",
+      "Name": {
+        "English": "Egg Mode",
+        "Romanian": "Modul Oua"
+      },
       "Explaination": {
         "English": "In this mode, the motor will rotate and cease operation if it encounters an obstruction. The intent is to place an egg so that the motor stops when it touches the egg without cracking it.",
         "Romanian": "În acest mod, motorul se va roti și își va opri funcționarea dacă întâlnește o obstacol. Scopul este de a plasa un ou astfel încât motorul să se oprească când atinge oul fără a-l sparge."
@@ -11,7 +14,10 @@
     },
     {
       "Number": 2,
-      "Name": "Mirror Mode",
+      "Name": {
+        "English": "Mirror Mode",
+        "Romanian": "Modul Oglinjoara"
+      },
       "Explaination": {
         "English": "If an object obstructs the motor, it will reverse its rotation.",
         "Romanian": "Dacă un obiect blochează motorul, acesta va inversa rotația."
@@ -20,7 +26,10 @@
     },
     {
       "Number": 3,
-      "Name": "Acceleration Mode",
+      "Name": {
+        "English": "Acceleration Mode",
+        "Romanian": "Modul Accelerare"
+      },
       "Explaination": {
         "English": "If an external force pushes the motor, it will continuously accelerate. Conversely, it will decelerate if there's no contact.",
         "Romanian": "Dacă o forță externă împinge motorul, acesta va accelera în mod continuu. Invers, va decelera dacă nu există contact."
@@ -29,7 +38,10 @@
     },
     {
       "Number": 4,
-      "Name": "Record Positions mode",
+      "Name": {
+        "English": "Record Positions Mode",
+        "Romanian": "Modul Înregistrare Poziții"
+      },
       "Explaination": {
         "English": "This feature allows users to record a particular movement. The motor will then replicate that motion.",
         "Romanian": "Această caracteristică permite utilizatorilor să înregistreze un anumit mișcare. Motorul va replica apoi acea mișcare."
@@ -38,7 +50,10 @@
     },
     {
       "Number": 5,
-      "Name": "Position Return Mode",
+      "Name": {
+        "English": "Position Return Mode",
+        "Romanian": "Modul Întoarcere la Poziția Inițială"
+      },
       "Explaination": {
         "English": "The motor will revert to its default position.",
         "Romanian": "Motorul se va întoarce la poziția sa implicită."
@@ -47,7 +62,10 @@
     },
     {
       "Number": 6,
-      "Name": "Flip Flap Mode",
+      "Name": {
+        "English": "Flip Flap Mode",
+        "Romanian": "Modul Flip Flap"
+      },
       "Explaination": {
         "English": "This mode requires two motors. One motor rotates until it comes into contact with the other, at which point it stops and activates the second motor. The second motor then does the same, stopping upon contact and activating the first motor.",
         "Romanian": "Acest mod necesită două motoare. Un motor se rotește până intră în contact cu celălalt, moment în care se oprește și activează al doilea motor. Al doilea motor face apoi același lucru, oprindu-se la contact și activând primul motor."
@@ -56,7 +74,10 @@
     },
     {
       "Number": 7,
-      "Name": "Crips Mode",
+      "Name": {
+        "English": "Crisp Mode",
+        "Romanian": "Modul Crips"
+      },
       "Explaination": {
         "English": "In this mode, the motor remains stationary until external force is applied. The objective is to push the motor with a crisp without breaking it.",
         "Romanian": "În acest mod, motorul rămâne staționar până când se aplică o forță externă. Scopul este să se impingă motorul cu un biscuit fără să se spargă."
@@ -65,7 +86,10 @@
     },
     {
       "Number": 8,
-      "Name": "Option",
+      "Name": {
+        "English": "Option",
+        "Romanian": "Opțiune"
+      },
       "Explaination": {
         "English": "Option and configurationMode",
         "Romanian": "Opțiune și configurareMode"
