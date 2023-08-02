@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Model;
+using Spectre.Console;
 
 
 namespace ViewModel
@@ -20,6 +21,10 @@ namespace ViewModel
                 List<Motor> MotorList = MenuPrincipal.motors;
                 if (MotorList.Count != 0)
                 {
+
+                    MotorList[0].SetPositon(0, true);
+                    MotorList[0].test();
+
                     switch (MenuPrincipal.NumProg)
                     {
                         case "1":
