@@ -13,7 +13,7 @@ namespace ViewModel
             while (!Console.KeyAvailable)
             {
                 m1.RefreshInfo();
-                m1.RefreshInfo();
+                m2.RefreshInfo();
 
                 if (m1.IsLocked && !m1.IsUnderthreshold(m1.Constantes.EGG_TORQUE_SENSITIVITY))
                 {
