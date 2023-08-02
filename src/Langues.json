@@ -95,6 +95,279 @@
         "Romanian": "Opțiune și configurareMode"
       },
       "Motor_required": 0
+
+
+
+
+
+
+
+      
+
+      {
+  "messages": [
+    {
+      "name": "This is the first message.",
+      "text": {
+        "english": "This is the first message.",
+        "romanian": "Acesta este primul mesaj."
+      }
+    },
+    {
+      "name": "Hello, how are you?",
+      "text": {
+        "english": "Hello, how are you?",
+        "romanian": "Bună, ce mai faci?"
+      }
+    },
+    {
+      "name": "I like learning new things.",
+      "text": {
+        "english": "I like learning new things.",
+        "romanian": "Îmi place să învăț lucruri noi."
+      }
+    },
+    {
+      "name": "Average velocity :",
+      "text": {
+        "english": "Average velocity :",
+        "romanian": "Viteza medie :"
+      }
+    },
+    {
+      "name": "Average torque :",
+      "text": {
+        "english": "Average torque :",
+        "romanian": "Cuplu mediu :"
+      }
+    },
+    {
+      "name": "Estimated velocity",
+      "text": {
+        "english": "Estimated velocity",
+        "romanian": "Viteza estimată"
+      }
+    },
+    {
+      "name": "Brake !!!",
+      "text": {
+        "english": "Brake !!!",
+        "romanian": "Frânează !!!"
+      }
+    },
+    {
+      "name": "You want to change",
+      "text": {
+        "english": "You want to change",
+        "romanian": "Vrei să schimbi"
+      }
+    },
+    {
+      "name": "Enter the new value of this variable.",
+      "text": {
+        "english": "Enter the new value of this variable.",
+        "romanian": "Introduceți noua valoare a acestei variabile."
+      }
+    },
+    {
+      "name": "MOTOR_SEUIL",
+      "text": {
+        "english": "MOTOR_SEUIL",
+        "romanian": "MOTOR_SEUIL"
+      }
+    },
+    {
+      "name": "Please set the initial position of the motor. Then press any key to begin.",
+      "text": {
+        "english": "Please set the initial position of the motor. Then press any key to begin.",
+        "romanian": "Vă rugăm să setați poziția inițială a motorului. Apoi apăsați orice tastă pentru a începe."
+      }
+    },
+    {
+      "name": "Position to reach: ",
+      "text": {
+        "english": "Position to reach: ",
+        "romanian": "Poziția de atins: "
+      }
+    },
+    {
+      "name": "Average position: ",
+      "text": {
+        "english": "Average position: ",
+        "romanian": "Poziția medie: "
+      }
+    },
+    {
+      "name": "Force moyenne",
+      "text": {
+        "english": "Force moyenne",
+        "romanian": "Forță medie"
+      }
+    },
+    {
+      "name": "Displacement :",
+      "text": {
+        "english": "Displacement :",
+        "romanian": "Deplasare :"
+      }
+    },
+    {
+      "name": "1 - Play",
+      "text": {
+        "english": "1 - Play",
+        "romanian": "1 - Redare"
+      }
+    },
+    {
+      "name": "2 - Record based on velocity",
+      "text": {
+        "english": "2 - Record based on velocity",
+        "romanian": "2 - Înregistrare pe baza vitezei"
+      }
+    },
+    {
+      "name": "3 - Record based on position",
+      "text": {
+        "english": "3 - Record based on position",
+        "romanian": "3 - Înregistrare pe baza poziției"
+      }
+    },
+    {
+      "name": "Select [red]record[/] or [green]Play[/] a motion.",
+      "text": {
+        "english": "Select [red]record[/] or [green]Play[/] a motion.",
+        "romanian": "Selectați [red]înregistrare[/] sau [green]redare[/] a mișcării."
+      }
+    },
+    {
+      "name": "[grey](Move up and down to reveal more frameworks)[/]",
+      "text": {
+        "english": "[grey](Move up and down to reveal more frameworks)[/]",
+        "romanian": "[grey](Deplasați în sus și în jos pentru a dezvălui mai multe cadre)[/]"
+      }
+    },
+    {
+      "name": "Please set the initial position of the motor. Then press any key to record.",
+      "text": {
+        "english": "Please set the initial position of the motor. Then press any key to record.",
+        "romanian": "Vă rugăm să setați poziția inițială a motorului. Apoi apăsați orice tastă pentru a înregistra."
+      }
+    },
+    {
+      "name": "Recording motion... Press any key to stop recording.",
+      "text": {
+        "english": "Recording motion... Press any key to stop recording.",
+        "romanian": "Se înregistrează mișcarea... Apăsați orice tastă pentru a opri înregistrarea."
+      }
+    },
+    {
+      "name": "The values have been saved in the random.csv file",
+      "text": {
+        "english": "The values have been saved in the random.csv file",
+        "romanian": "Valorile au fost salvate în fișierul random.csv"
+      }
+    },
+    {
+      "name": "Motion Example starting. Press Enter to continue.",
+      "text": {
+        "english": "Motion Example starting. Press Enter to continue.",
+        "romanian": "Exemplu de mișcare începând. Apăsați Enter pentru a continua."
+      }
+    },
+    {
+      "name": "Found {0} SC Hubs.",
+      "text": {
+        "english": "Found {0} SC Hubs.",
+        "romanian": "S-au găsit {0} hub-uri SC."
+      }
+    },
+    {
+      "name": "Unable to locate SC hub port.",
+      "text": {
+        "english": "Unable to locate SC hub port.",
+        "romanian": "Nu se poate localiza portul hub-ului SC."
+      }
+    },
+    {
+      "name": "Port {0}: state={1}, nodes={2}",
+      "text": {
+        "english": "Port {0}: state={1}, nodes={2}",
+        "romanian": "Portul {0}: stare={1}, noduri={2}"
+      }
+    },
+    {
+      "name": "   Node[{0}]: type={1}",
+      "text": {
+        "english": "   Node[{0}]: type={1}",
+        "romanian": "   Nod[{0}]: tip={1}"
+      }
+    },
+    {
+      "name": "            userID: {0}",
+      "text": {
+        "english": "            userID: {0}",
+        "romanian": "            userID: {0}"
+      }
+    },
+    {
+      "name": "        FW version: {0}",
+      "text": {
+        "english": "        FW version: {0}",
+        "romanian": "        Versiune FW: {0}"
+      }
+    },
+    {
+      "name": "          Serial #: {0}",
+      "text": {
+        "english": "          Serial #: {0}",
+        "romanian": "          Număr serial: {0}"
+      }
+    },
+    {
+      "name": "             Model: {0}",
+      "text": {
+        "english": "             Model: {0}",
+        "romanian": "             Model: {0}"
+      }
+    },
+    {
+      "name": "Node {0} enabled.",
+      "text": {
+        "english": "Node {0} enabled.",
+        "romanian": "Nodul {0} activat."
+      }
+    },
+    {
+      "name": "Error: Timed out waiting for Node {0} to enable.",
+      "text": {
+        "english": "Error: Timed out waiting for Node {0} to enable.",
+        "romanian": "Eroare: Depășirea timpului așteptând activarea Nodului {0}."
+      }
+    },
+    {
+      "name": "Moving Node {0}",
+      "text": {
+        "english": "Moving Node {0}",
+        "romanian": "Se mută Nodul {0}"
+      }
+    },
+    {
+      "name": "Proportional program :",
+      "text": {
+        "english": "Proportional program :",
+        "romanian": "Program proporțional:"
+      }
+    },
+    {
+      "name": "Waiting over",
+      "text": {
+        "english": "Waiting over",
+        "romanian": "Așteptare încheiată"
+      }
+    }
+  ]
+}
+
     }
   ]
 }
