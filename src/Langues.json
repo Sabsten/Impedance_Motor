@@ -1,21 +1,4 @@
-
-
-
-//Séléction de la langue
 {
-  "LanguageOptions": {
-    "English": {
-      "ID": 1,
-      "Name": "English"
-    },
-    "Romanian": {
-      "ID": 2,
-      "Name": "Romanian"
-    }
-  },
-
-
-  //Même code qu'avant mais avec une partie en Roumain
   "Mods": [
     {
       "Number": 1,
