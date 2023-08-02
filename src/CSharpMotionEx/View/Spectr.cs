@@ -61,7 +61,6 @@ namespace ViewModel
                     .AddChoices(m_ModeList));
             m_NumMotorRequired = m_ModeListObjectt[int.Parse(framework.Split(" - ".ToCharArray())[0]) - 1].Motor_required;
             m_NumProg = framework.Split(" - ".ToCharArray())[0];
-
         }
 
         public void MotorSelection()

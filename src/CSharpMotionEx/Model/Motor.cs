@@ -1,8 +1,10 @@
 ﻿using CSharpMotionEx.Class;
 using sFndCLIWrapper;
+using Spectre.Console;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using ViewModel;
 namespace Model
 {
@@ -94,9 +96,12 @@ namespace Model
         public void SetVelocity(double velocityNumber)
         {
             m_Node.NodeObject.Motion.MoveVelStart(velocityNumber);
-            Publish(velocityNumber, VelocityAverage);
+            Publish(velocityNumber, m_positionValue.Value());
         }
 
+        public void test()
+        { 
+        }
         public void SetPosition(int positionNumber)
         {
             m_Node.NodeObject.Motion.MovePosnStart(positionNumber,false,false) ;
@@ -141,16 +146,16 @@ namespace Model
 
         public void StopWait(cliNodeStopCodes stopType = cliNodeStopCodes.STOP_TYPE_ABRUPT)
         {
-            Publish(0, PositionAverage);
+            Publish(0, m_positionValue.Value());
             m_Node.NodeObject.Motion.NodeStop(stopType);
             Disable();
             Enable();
             
         }
 
-        public void Stop( cliNodeStopCodes stopType = cliNodeStopCodes.STOP_TYPE_ABRUPT)
+        public void Stop(cliNodeStopCodes stopType = cliNodeStopCodes.STOP_TYPE_ABRUPT)
         {
-            Publish(0, PositionAverage);
+            Publish(0, m_positionValue.Value());
             m_Node.NodeObject.Motion.NodeStop(stopType);
 
         }

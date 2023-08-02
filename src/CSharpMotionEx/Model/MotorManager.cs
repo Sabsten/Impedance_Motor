@@ -64,7 +64,6 @@ namespace Model
                     {
                         if (myMgr.TimeStampMsec() > myMgr.TimeStampMsec() + c.TIME_TILL_TIMEOUT)
                         {
-                               
                         }
                     }
                 }
