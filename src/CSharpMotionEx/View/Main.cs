@@ -12,12 +12,7 @@ namespace ViewModel
             while (true)
             {
                 Interface MenuPrincipal = new Interface();
-                MenuPrincipal.ModMenu();
-                MenuPrincipal.ModeSelection();
-                Console.Clear();
-                MenuPrincipal.MotorSelection();
-                Console.Clear();
-                List<Motor> MotorList = MenuPrincipal.motors;
+                List<Motor> MotorList = MenuPrincipal.getMotors();
                 if (MotorList.Count != 0)
                 {
                     switch (MenuPrincipal.NumProg)

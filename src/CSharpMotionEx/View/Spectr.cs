@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,7 +10,6 @@ using System.Xml;
 using Model;
 using Newtonsoft.Json;
 using Spectre.Console;
-using static ViewModel.Interface;
 
 namespace ViewModel
 {
@@ -22,31 +22,32 @@ namespace ViewModel
         private string m_NumMotorRequired;
         public string NumMotorRequired { get { return m_NumMotorRequired; } }
         private List<Motor> m_motors;
-        public List<Motor> motors { get { return m_motors; } }
-        private volatile bool updateNeeded = false;
+        // New function below that wait for the motors to be defined
+        // public List<Motor> motors { get { return m_motors; } }
+        private volatile bool m_updateNeeded = true;
+        private bool m_inSubMenu = false;
+
+        public Interface()
+        {
+            ModMenu();
+        }
 
         public void ModMenu()
         {
             m_ModeListObjectt = ParseJson(GetModsDirectory());
-            int lastWindowWidth = 0;
+            int lastWindowWidth = -1;
+
+            DisplayMenu(0);
 
             // Créer une nouvelle tâche pour lire les entrées de l'utilisateur
             Task.Factory.StartNew(() =>
             {
-                while (true)
-                {
-                    if (Console.KeyAvailable)
-                    {
-                        var keyInfo = Console.ReadKey(true);
-                        if (keyInfo.Key == ConsoleKey.Enter)
-                        {
-                            ModeSelection();
-                            MotorSelection();
-                            updateNeeded = true;
-                        }
-                    }
-                    System.Threading.Thread.Sleep(100);
-                }
+                m_inSubMenu = false;
+                ModeSelection();
+                m_inSubMenu = true;
+                m_updateNeeded = true;
+                Thread.Sleep(500);
+                MotorSelection();
             });
 
             while (true)
@@ -54,11 +55,11 @@ namespace ViewModel
                 int windowWidth = Console.WindowWidth;
 
                 // Si la fenêtre est redimensionnée ou qu'une sélection a été faite, mettez à jour l'affichage
-                if (windowWidth != lastWindowWidth || updateNeeded)
+                if (windowWidth != lastWindowWidth || m_updateNeeded)
                 {
                     DisplayMenu(windowWidth);
                     lastWindowWidth = windowWidth;
-                    updateNeeded = false;
+                    m_updateNeeded = false;
                 }
                 System.Threading.Thread.Sleep(500);
             }
@@ -69,6 +70,8 @@ namespace ViewModel
     private void DisplayMenu(int windowWidth)
         {
             AnsiConsole.Clear();
+
+            if (m_inSubMenu) return;
 
             AnsiConsole.Write(
                 new FigletText("Impedance-Motor")
@@ -99,54 +102,6 @@ namespace ViewModel
                         .Expand()
                         .BorderColor(Color.Red)
                         .Header("[[ [bold underline blue on white]List of Mods[/] ]]"));
-        }
-
-        // Le reste de votre code...
-
-        public class InputReader
-        {
-            private Queue<ConsoleKeyInfo> keyBuffer = new Queue<ConsoleKeyInfo>();
-            private Thread inputThread;
-            private AutoResetEvent getInput, gotInput;
-            public bool KeyAvailable { get { lock (keyBuffer) return keyBuffer.Count > 0; } }
-
-            public InputReader()
-            {
-                getInput = new AutoResetEvent(false);
-                gotInput = new AutoResetEvent(false);
-                inputThread = new Thread(reader);
-                inputThread.IsBackground = true;
-                inputThread.Start();
-            }
-
-            public void StartReading()
-            {
-                if (inputThread.IsAlive) return;
-                inputThread.Start();
-            }
-
-            private void reader()
-            {
-                while (true)
-                {
-                    getInput.WaitOne();
-                    while (Console.KeyAvailable)
-                    {
-                        lock (keyBuffer) keyBuffer.Enqueue(Console.ReadKey(true));
-                    }
-                    gotInput.Set();
-                }
-            }
-
-            public ConsoleKeyInfo ReadKey()
-            {
-                getInput.Set();
-                gotInput.WaitOne();
-                lock (keyBuffer)
-                {
-                    return keyBuffer.Dequeue();
-                }
-            }
         }
 
         public void ModeSelection()
@@ -192,6 +147,15 @@ namespace ViewModel
                         .AddChoices(list));
             }
             m_motors = MManager.MotorList;
+        }
+
+        public List<Motor> getMotors()
+        {
+            while (m_motors == null)
+            {
+                Thread.Sleep(500);
+            }
+            return m_motors;
         }
 
         string GetModsDirectory(string cfgFileName = "statham.json")
