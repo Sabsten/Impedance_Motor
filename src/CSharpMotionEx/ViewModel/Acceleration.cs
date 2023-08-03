@@ -15,25 +15,28 @@ namespace ViewModel
                 m.RefreshInfo(15);
                 Console.WriteLine("Velocity moy:" + m.VelocityAverage);
                 Console.WriteLine("Torque moy:" + m.TorqueAverage);
+                double lastvelmoy = m.VelocityAverage;
+                double lastPos = m.PositionAverage;
+                double lasttorquemoy = m.TorqueAverage;
                 //Vérifier pour une torque dans le sens de rotation
                 //Dans le cas ou le moteur ne bouge pas
                 if (m.VelocityAverage < 10 && m.VelocityAverage > -10 && m.MoveIsDone())
                 {
                     m.Disable();
                     //Démarrage sans assistance
-                    double lastvelmoy = m.VelocityAverage;
-                    double lasttorquemoy = m.TorqueAverage;
                     double maxvalue = 0;
                     bool launch = false;
                     //Tant que on a pas dépassé la valeur maximal ou que on a indiqué une même direction pendant 30 tours
 
 
+                    lastvelmoy = 0;
 
-                    while (maxvalue < 80 && launch == false)
+                    while (maxvalue < 80 && !(maxvalue > lastvelmoy/2 && maxvalue>30) && launch == false)
                     {
                         //Enreigstre les derniers relevés
                         lastvelmoy = m.VelocityAverage;
                         lasttorquemoy = m.TorqueAverage;
+                        lastPos = m.PositionAverage;
                         //rafraichis les valeurs
                         m.RefreshInfo(15);
 
@@ -124,9 +127,30 @@ namespace ViewModel
                         //Arrêt focé si torque trop élevé
                         if (Math.Abs(m.TorqueAverage) > 7)
                         {
+                            Console.WriteLine("urgence!!!!");
                             m.Stop(cliNodeStopCodes.STOP_TYPE_ABRUPT);
-                            m.Disable();
-                            m.Enable();
+                            if (lastvelmoy > 0)
+                            {
+                                m.SetVelocity(-10);
+                            }
+                            else if (lastvelmoy < 0)
+                            {
+                                m.SetVelocity(10);
+                            }
+                            while (Math.Abs(m.TorqueAverage) > 1)
+                            {
+                                m.RefreshInfo(10);
+                                if (lastvelmoy > 0)
+                                {
+                                    m.SetVelocity(-10);
+                                }
+                                else if (lastvelmoy < 0)
+                                {
+                                    m.SetVelocity(10);
+                                }
+                            }
+                            
+                            m.Stop(cliNodeStopCodes.STOP_TYPE_RAMP);
                         }
 
 
@@ -153,7 +177,7 @@ namespace ViewModel
                         }
                     }
                 }
-                m.Wait(100);
+                m.Wait(50);
             }
         }
 

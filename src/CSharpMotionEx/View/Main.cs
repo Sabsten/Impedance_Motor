@@ -54,6 +54,10 @@ namespace ViewModel
                             Console.WriteLine("");
                             _ = new Option(MotorList[0]);
                             break;
+                        case "9":
+                            Console.WriteLine("");
+                            _ = new PID(MotorList[0]);
+                            break;
                     }
                 }
                 else

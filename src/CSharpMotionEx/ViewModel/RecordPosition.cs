@@ -6,6 +6,7 @@ using Model;
 using Spectre.Console;
 using System.Windows.Documents;
 using System.Diagnostics;
+using System.Linq;
 
 namespace ViewModel
 {
@@ -114,18 +115,30 @@ namespace ViewModel
         public void RecordPositions()
 
         {
+            //A chaque fois changement de signe = changement de sens
+            bool pos = true;
+            double delta = 0;
+            double lastPosition = 0;
             Console.WriteLine("Please set the initial position of the motor. Then press any key to record.");
             Console.ReadKey();
             m.ResetPositionToHome();
             m_VelocityList = null;
             m_PositionList = new List<double>();
             Console.WriteLine("Recording motion... Press any key to stop recording.");
+            m_PositionList.Add(m.PositionAverage);
             while (!Console.KeyAvailable)
             {
                 m.Wait(500);
                 m.RefreshInfo(1);
                 Console.WriteLine(m.PositionAverage);
-                m_PositionList.Add(m.PositionAverage);
+                delta = m.PositionAverage - lastPosition;
+
+                if ((delta<0 == pos) || m_PositionList.Last() == 0 || lastPosition == 0)
+                {
+                    m_PositionList.Add(m.PositionAverage);
+                }
+                pos = delta < 0;
+                lastPosition = m.PositionAverage;
             }
         }
     }

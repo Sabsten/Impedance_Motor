@@ -94,7 +94,7 @@ namespace Model
         public void SetVelocity(double velocityNumber)
         {
             m_Node.NodeObject.Motion.MoveVelStart(velocityNumber);
-            Publish(velocityNumber, VelocityAverage);
+            //Publish(velocityNumber, VelocityAverage);
         }
 
         public void SetPosition(int positionNumber)
@@ -211,8 +211,14 @@ namespace Model
         }
 
 
-        public double PositionDependingOnTorque(double torqueMoy){return 1000 / (1 + Math.Exp(-0.1 * (torqueMoy * 2 - 30)));}
-        public double VelocityDependingOnPositionForward(double diff){return 50 * (1 - (1 / (1 + Math.Exp(-0.03 * (diff * 0.08 - 200)))));}
-        public double VelocityDependingOnPositionBackward(double diff){ return (50 / (1 + Math.Exp(-0.1 * (diff * 0.03 - 30))));}
+        public double PositionDependingOnTorque(double torqueMoy){
+            return 1000 / (1 + Math.Exp(-0.1 * (torqueMoy * 2 - 30)));
+        }
+        public double VelocityDependingOnPositionForward(double diff){
+            return 50 * (1 - (1 / (1 + Math.Exp(-0.03 * (diff * 0.08 - 200)))));
+        }
+        public double VelocityDependingOnPositionBackward(double diff){
+            return (50 / (1 + Math.Exp(-0.1 * (diff * 0.03 - 30))));
+        }
     }
 }

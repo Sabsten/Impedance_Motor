@@ -256,6 +256,7 @@
     <Compile Include="Model\Constantes.cs" />
     <Compile Include="Model\Motor.cs" />
     <Compile Include="ViewModel\Acceleration.cs" />
+    <Compile Include="ViewModel\PID.cs" />
     <Compile Include="ViewModel\ZZ_Class_example.cs" />
     <Compile Include="ViewModel\Crips.cs" />
     <Compile Include="ViewModel\FlipFlap.cs" />
