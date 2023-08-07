@@ -43,14 +43,16 @@ namespace ViewModel
                 erreurCoupleIntegral += erreurCouple;
 
                 // Calculer la dérivée de l'erreur de couple
+                // Calculer la commande de vitesse en utilisant le régulateur PID
                 double erreurCoupleDerivee = erreurCouple - erreurCouplePrecedente;
                 double commandeVitesse = Kp * erreurCouple + Ki * erreurCoupleIntegral + Kd * erreurCoupleDerivee;
+
 
 
                 if (Math.Abs(m.TorqueAverage) < 1 && Math.Abs(m.VelocityAverage) < 10)
                 {
                     Console.WriteLine("fdsfdsqfd");
-                    // Calculer la commande de vitesse en utilisant le régulateur PID
+                    //Fonction de lissage
                     commandeVitesse = alpha * commandeVitesse + (1 - alpha) * commandeVitessePrecedente;
                     commandeVitessePrecedente = commandeVitesse;
                 }

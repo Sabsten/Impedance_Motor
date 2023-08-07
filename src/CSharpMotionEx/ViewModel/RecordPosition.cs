@@ -14,6 +14,7 @@ namespace ViewModel
     {
         private List<double> m_VelocityList;
         private List<double> m_PositionList;
+        private List<double> m_PositionList2;
         private Motor m;
 
         public RecordPosition(Motor motor)
@@ -59,24 +60,48 @@ namespace ViewModel
         }
         public void PlayVelocities()
         {
+            Console.WriteLine("Please set the initial position of the motor. Then press any key to play.");
+            Console.ReadKey();
+            m.ResetPositionToHome();
             m.Enable();
-            //m.SetPositon(m_initial_position, true);
-            foreach (var item in m_VelocityList)
+            double lastVelocity = 0;
+            int i = 0;
+
+            foreach (var velocity in m_VelocityList)
             {
-                if (item == 0)
+                m.RefreshInfo(1);
+                m.Wait(5);
+
+                if (velocity == 0)
                 {
-                    //m.LockReccord(1, cliNodeStopCodes.STOP_TYPE_RAMP);
                     m.Stop(cliNodeStopCodes.STOP_TYPE_ABRUPT);
                 }
-                else
+                else if (velocity * lastVelocity < 0)
                 {
-                    m.SetVelocity(item);
-
+                    m.Stop(cliNodeStopCodes.STOP_TYPE_ABRUPT);
                 }
-                m.Wait(30);
+
+                m.SetVelocity(velocity);
+                double targetPosition = m_PositionList2.ElementAt(i);
+                double currentPosition = m.PositionAverage;
+
+                while ((velocity > 0 && currentPosition < targetPosition) ||
+                       (velocity < 0 && currentPosition > targetPosition))
+                {
+                    m.RefreshInfo(1);
+                    Console.WriteLine("Current" + currentPosition);
+                    Console.WriteLine("Target" + targetPosition);
+                    m.Wait(5);
+                    currentPosition = m.PositionAverage;
+                }
+
+                i++;
+                lastVelocity = velocity;
             }
             m.Disable();
         }
+
+
 
         public void PlayPositions()
         {
@@ -102,6 +127,7 @@ namespace ViewModel
             Console.WriteLine("Please set the initial position of the motor. Then press any key to record.");
             Console.ReadKey();
             m_PositionList = null;
+            m_PositionList2 = new List<double>();
             m_VelocityList = new List<double>();
             Console.WriteLine("Recording motion... Press any key to stop recording.");
             while (!Console.KeyAvailable)
@@ -109,6 +135,7 @@ namespace ViewModel
                 m.Wait(30);
                 m.RefreshInfo(1);
                 m_VelocityList.Add(m.VelocityAverage);
+                m_PositionList2.Add(m.PositionAverage);
             }
         }
 
@@ -118,6 +145,7 @@ namespace ViewModel
             //A chaque fois changement de signe = changement de sens
             bool pos = true;
             double delta = 0;
+            double lastDelta = 0;
             double lastPosition = 0;
             Console.WriteLine("Please set the initial position of the motor. Then press any key to record.");
             Console.ReadKey();
@@ -133,12 +161,23 @@ namespace ViewModel
                 Console.WriteLine(m.PositionAverage);
                 delta = m.PositionAverage - lastPosition;
 
-                if ((delta<0 == pos) || m_PositionList.Last() == 0 || lastPosition == 0)
+                if ((delta * lastDelta > 0) || m_PositionList.Last() == 0 || lastPosition == 0)
                 {
                     m_PositionList.Add(m.PositionAverage);
                 }
-                pos = delta < 0;
+                lastDelta = delta;
                 lastPosition = m.PositionAverage;
+            }
+            //Supprimer les positions superflues:
+            // Parcourir la liste à l'envers
+            for (int i = m_PositionList.Count - 2; i >= 0; i--)
+            {
+                double difference = Math.Abs(m_PositionList[i + 1] - m_PositionList[i]); // Utiliser la valeur absolue
+
+                if (difference < 300)
+                {
+                    m_PositionList.RemoveAt(i + 1); // Supprimer l'élément suivant
+                }
             }
         }
     }

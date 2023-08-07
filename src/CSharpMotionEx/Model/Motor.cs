@@ -161,7 +161,7 @@ namespace Model
             m_velocitiesList.Clear();
             m_positionsList.Clear();
             m_now2 = DateTimeOffset.Now.ToUnixTimeSeconds();    
-            Console.WriteLine(m_Node.NodeObject.Info.PositioningResolution.Value());
+            //Console.WriteLine(m_Node.NodeObject.Info.PositioningResolution.Value());
             for (int j = 0; j < itteration; j++)
             {
                 m_torqueValue.Refresh();
@@ -170,6 +170,7 @@ namespace Model
                 m_torquesList.Add(m_torqueValue.Value());
                 m_velocitiesList.Add(m_velocityValue.Value());
                 m_positionsList.Add(m_positionValue.Value());
+                Wait(10);
             }
         }
 
@@ -214,11 +215,14 @@ namespace Model
         public double PositionDependingOnTorque(double torqueMoy){
             return 1000 / (1 + Math.Exp(-0.1 * (torqueMoy * 2 - 30)));
         }
-        public double VelocityDependingOnPositionForward(double diff){
-            return 50 * (1 - (1 / (1 + Math.Exp(-0.03 * (diff * 0.08 - 200)))));
+        public double VelocityDependingOnPositionForward(double distance)
+        {
+            //return (30 / (1 + Math.Exp(-0.1 * (diff * 0.01 * 50 - 30))));
+
+            return 20 -(20 / (1 + Math.Exp(-0.02 * (distance * 0.2 - 200))));
         }
         public double VelocityDependingOnPositionBackward(double diff){
-            return (50 / (1 + Math.Exp(-0.1 * (diff * 0.03 - 30))));
+            return (30 / (1 + Math.Exp(-0.15 * (diff * 0.02 - 20))));
         }
     }
 }

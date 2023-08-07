@@ -29,48 +29,48 @@ namespace ViewModel
                 posObj = m.PositionDependingOnTorque(Math.Abs(torqueMoy));
 
 
-                double diff = 0;
-                if (positionMoy < 0)
-                {
-                    diff = posObj - positionMoy;
-                }
-                else if (positionMoy > 0)
-                {
-                    diff = positionMoy + posObj;
-                }
-                if (diff < 0)
-                {
-                    diff = 0;
-                }
 
-                double estimation_vitesse_back = m.VelocityDependingOnPositionBackward(diff);
+                double estimation_vitesse_back = m.VelocityDependingOnPositionBackward(Math.Abs(positionMoy));
+
 
                 double estimation_vitesse_forth = m.VelocityDependingOnPositionForward(Math.Abs(positionMoy));
 
                 Console.WriteLine(torqueMoy);
 
                 //Pour les cas ou on est proche de 0 et on applique pas de force
-                if (-60 < posObj && posObj < 60 && Math.Abs(torqueMoy)<1)
+                if ((positionMoy * m.TorqueAverage > 0 && Math.Abs(positionMoy) > 500) || Math.Abs(m.TorqueAverage) < 1)
                 {
-                    if (positionMoy > 30)
-                    {
-                        posDiff = -estimation_vitesse_back;
-                    }
-                    else if (positionMoy < -30)
-                    {
-                        posDiff = estimation_vitesse_back;
-                    }
-                    else
+                    posDiff = 0;
+                    m.RefreshInfo(5);
+
+                    if (Math.Abs(m.TorqueAverage) > 1)
                     {
                         posDiff = 0;
                     }
+                    else if (Math.Abs(positionMoy) < 300){
+                        m.Stop();
+                    }
+                    else if (positionMoy > 300)
+                        {
+                            posDiff = -estimation_vitesse_back;
+                        }
+                        else if (positionMoy < -300)
+                        {
+                            posDiff = estimation_vitesse_back;
+                        }
+                        else
+                        {
+                            posDiff = 0;
+                    }
+                    
+
                 }
                 //Va position positive
                 else if (posObj > 60 && torqueMoy < -1)
                 {
                     //Pour avancer
                     //Stop si trop loin
-                    if (Math.Abs(positionMoy) > 3500)
+                    if (Math.Abs(positionMoy) > 1700)
                     {
                         posDiff = 0;
                     }
@@ -84,7 +84,7 @@ namespace ViewModel
                 {
                     //Pour avancer
                     //Stop si trop loin
-                    if (Math.Abs(positionMoy) > 3500)
+                    if (Math.Abs(positionMoy) > 1700)
                     {
                         posDiff = 0;
                     }
@@ -92,23 +92,17 @@ namespace ViewModel
                     {
                         posDiff = -estimation_vitesse_forth;
                     }
-                    Console.WriteLine("Vitesse estimée 2:" + estimation_vitesse_forth);
+                    Console.WriteLine("Vitesse estimée 2:" + positionMoy);
                 }
                 else
                 {
                     posDiff = 0;
                 }
 
-
-                Console.WriteLine("Position à atteindre: " + posObj);
-                Console.WriteLine("Position moy: " + positionMoy);
-                Console.WriteLine("Force moyenne" + torqueMoy);
-                Console.WriteLine("Déplacement" + posDiff);
-
-                Console.WriteLine("///////////");
+                Console.WriteLine("Déplacement" + torqueMoy);
 
                 m.SetVelocity(posDiff);
-                m.Wait(100);
+                m.Wait(50);
             }
         }
 
