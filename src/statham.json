@@ -47,6 +47,12 @@
       "Name": "Option",
       "Explaination": "Option and configurationMode",
       "Motor_required": 0
+    },
+    {
+      "Number": 9,
+      "Name": "PID",
+      "Explaination": "Test",
+      "Motor_required": 0
     }
   ]
 }

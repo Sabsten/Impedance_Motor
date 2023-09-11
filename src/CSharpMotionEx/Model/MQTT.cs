@@ -69,7 +69,7 @@ namespace Model
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error while publishing: " + e.Message);
+                //Console.WriteLine("Error while publishing: " + e.Message);
             }
         }
     }
