@@ -13,14 +13,14 @@ namespace ViewModel
         public PID(Motor m)
         {
             m.Initialize();
-            double coupleCible = 0;
+            double coupleCible = 0.5;
 
             //A régler jusqu'à ce que le système oscille
             //this.Kp = 15 * 0.6;
             //this.Ki = 2* this.Kp / 4;
             //this.Kd = this.Kp * 5 / 8;
-            this.Kp = 5;
-            this.Ki = 3;
+            this.Kp = 5.2;
+            this.Ki = 2.5;
             this.Kd = 2;
             this.erreurCoupleIntegral = 0;
             this.erreurCouplePrecedente = 0;
