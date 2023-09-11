@@ -42,6 +42,8 @@ namespace CSharpMotionEx.Class
                 m_torqueValue = NodeObject.Motion.TrqMeasured;
                 m_velocityValue = NodeObject.Motion.VelMeasured;
                 m_positionValue = NodeObject.Motion.PosnMeasured;
+                Console.WriteLine(m_positionValue.Value());
+                Console.ReadKey();
                 m_NodeObject = NodeObject;
             }
         }

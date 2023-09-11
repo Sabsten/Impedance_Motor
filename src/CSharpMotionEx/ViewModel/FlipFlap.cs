@@ -13,21 +13,21 @@ namespace ViewModel
             while (!Console.KeyAvailable)
             {
                 m1.RefreshInfo();
-                m1.RefreshInfo();
+                m2.RefreshInfo();
 
                 if (m1.IsLocked && !m1.IsUnderthreshold(m1.Constantes.EGG_TORQUE_SENSITIVITY))
                 {
-                    m1.Stop();
+                    m1.StopWait();
                     m2.SetVelocity(50);
                 }
 
                 if (m2.IsLocked && !m2.IsUnderthreshold(m2.Constantes.EGG_TORQUE_SENSITIVITY))
                 {
-                    m2.Stop();
+                    m2.StopWait();
                     m1.SetVelocity(50);
                 }
-                m1.Wait(50);
-                m2.Wait(50);
+                m1.Wait(100);
+                m2.Wait(100);
             }
             m1.Terminate();
             m2.Terminate();

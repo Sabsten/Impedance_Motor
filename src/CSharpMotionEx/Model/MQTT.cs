@@ -55,7 +55,7 @@ namespace Model
             var motorInfo = new MotorInfo
             {
                 Speed = Velocity * 6,
-                Position = Modulo6400(Position)*0.001* (180 / 3.14)
+                Position = (Modulo6400(Position) )*0.001* (180 / 3.14)
             };
 
             var message = new MqttApplicationMessageBuilder()
